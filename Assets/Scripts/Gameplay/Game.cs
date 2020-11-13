@@ -6,8 +6,16 @@ public class Game : MonoBehaviour
     [SerializeField] private StoryData _data;
 
     private TextDisplay _output;
-    private BeatData _currentBeat;
+    public static BeatData _currentBeat;
     private WaitForSeconds _wait;
+
+    //Beat ID for selected difficulties
+    public enum Difficulty
+    {
+        Easy = 5,
+        Medium = 6,
+        Hard = 7,
+    }
 
     private void Awake()
     {
