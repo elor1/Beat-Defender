@@ -5,6 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class SceneManager : MonoBehaviour
 {
+
+    void Awake()
+    {
+        DontDestroyOnLoad(transform.gameObject);//Stop SceneManager from being destroyed when switching scenes
+    }
+
     // Start is called before the first frame update
     void Start()
     {
