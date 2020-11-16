@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Room
+public class RoomData
 {
     public List<MapGenerator.Coordinate> tiles;
     public List<MapGenerator.Coordinate> edgeTiles;
-    public List<Room> connectedRooms;
+    public List<RoomData> connectedRooms;
     public int roomSize;
 
-    public Room() { }
+    public RoomData() { }
 
     /// <summary>
     /// Room constructor
     /// </summary>
     /// <param name="roomTiles">List of coordinates of tiles in room</param>
     /// <param name="mapGrid">Array of TileTypes with map grid data</param>
-    public Room(List<MapGenerator.Coordinate> roomTiles, MapGenerator.TileType[,] mapGrid)
+    public RoomData(List<MapGenerator.Coordinate> roomTiles, MapGenerator.TileType[,] mapGrid)
     {
         tiles = roomTiles;
         roomSize = tiles.Count;
-        connectedRooms = new List<Room>();
+        connectedRooms = new List<RoomData>();
 
         edgeTiles = new List<MapGenerator.Coordinate>();
         foreach (MapGenerator.Coordinate tile in tiles)
@@ -46,7 +46,7 @@ public class Room
     /// </summary>
     /// <param name="room1">1st room to connect</param>
     /// <param name="room2">2nd room to connect</param>
-    public static void ConnectRooms(Room room1, Room room2)
+    public static void ConnectRooms(RoomData room1, RoomData room2)
     {
         room1.connectedRooms.Add(room2);
         room2.connectedRooms.Add(room1);
@@ -57,7 +57,7 @@ public class Room
     /// </summary>
     /// <param name="otherRoom">Room to check connections for</param>
     /// <returns>True or false</returns>
-    public bool IsConnected(Room otherRoom)
+    public bool IsConnected(RoomData otherRoom)
     {
         return connectedRooms.Contains(otherRoom);
     }

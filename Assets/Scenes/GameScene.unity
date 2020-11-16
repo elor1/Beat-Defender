@@ -175,7 +175,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2c84660c9337e624e8737266cf65e957, type: 2}
+  - {fileID: 2100000, guid: 11782cc59241b45479d988850cced9d6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -272,7 +272,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -315,8 +315,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c50f2c6ad61f3b439985369a7614176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetY: 60
-  offsetZ: -20
+  _offsetY: 16.24
+  _offsetZ: -10.3
 --- !u!1 &1417159751
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,10 +439,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _wallPercent: 45
-  _width: 60
-  _height: 80
+  _width: 80
+  _height: 60
   _tileSize: 1
-  _borderSize: 7
+  _borderSize: 6
   _smoothIterations: 20
   _pathRadius: 1
   _wallPrefab: {fileID: 2219021201442982130, guid: a12d4a976eb84c8459fe507687705a05, type: 3}
