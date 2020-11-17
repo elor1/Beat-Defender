@@ -10,14 +10,14 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float _scenePauseTime = 1.5f; //Number of seconds to wait before switching scenes
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _anim = GetComponent<Animator>();
         _anim.SetBool("IsZooming", false);
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Game._currentBeat != null)
         {
@@ -29,7 +29,7 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    void ZoomCamera()
+    private void ZoomCamera()
     {
         if (_anim.GetBool("IsZooming"))
         {

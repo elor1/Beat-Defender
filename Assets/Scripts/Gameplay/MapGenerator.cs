@@ -44,7 +44,7 @@ public class MapGenerator : MonoBehaviour
     private GameObject _playerModel; //Stores the actual player object
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _wallThreshold = (_width * _height) / 100;
         _roomThreshold = (_width * _height) / 150;
@@ -77,7 +77,7 @@ public class MapGenerator : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -92,12 +92,12 @@ public class MapGenerator : MonoBehaviour
     /// <param name="x">X index</param>
     /// <param name="y">Y index</param>
     /// <returns>True or false</returns>
-    bool IsInBounds(int x, int y)
+    private bool IsInBounds(int x, int y)
     {
         return (x >= _borderSize && x < _width - _borderSize & y >= _borderSize && y < _height - _borderSize);
     }
 
-    void InstantiateWalls()
+    private void InstantiateWalls()
     {
         _walls = new GameObject[_width, _height];
         for (int x = 0; x < _width; x++)
@@ -110,7 +110,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    void GenerateMap()
+    private void GenerateMap()
     {
         FillMap();
 
@@ -130,7 +130,7 @@ public class MapGenerator : MonoBehaviour
     /// <summary>
     /// Generates random data for new map
     /// </summary>
-    void FillMap()
+    private void FillMap()
     {
         System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
 
@@ -168,7 +168,7 @@ public class MapGenerator : MonoBehaviour
     /// <param name="gridX">X coordinate in grid map</param>
     /// <param name="gridY">Y coordinate in grid map</param>
     /// <returns>Number of walls surrounding give tile</returns>
-    int GetNumberOfSurroundingWalls(int gridX, int gridY)
+    private int GetNumberOfSurroundingWalls(int gridX, int gridY)
     {
         int wallCount = 0;
         for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
@@ -189,7 +189,7 @@ public class MapGenerator : MonoBehaviour
     /// <summary>
     /// Uses cellular automata to create more room-like shapes
     /// </summary>
-    void SmoothWalls()
+    private void SmoothWalls()
     {
         for (int x = 0; x < _width; x++)
         {
@@ -219,7 +219,7 @@ public class MapGenerator : MonoBehaviour
     /// <param name="startX">Starting x coordinate of region</param>
     /// <param name="startY">Starting y coordinate of region</param>
     /// <returns>List of tiles in a region</returns>
-    List<Coordinate> GetRegionTiles(int startX, int startY)
+    private List<Coordinate> GetRegionTiles(int startX, int startY)
     {
         List<Coordinate> tiles = new List<Coordinate>();
         int[,] checkedTiles = new int[_width, _height];
@@ -258,7 +258,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     /// <param name="tileType">Type of tile: Wall or Room</param>
     /// <returns>List of regions</returns>
-    List<List<Coordinate>> GetRegions(TileType tileType)
+    private List<List<Coordinate>> GetRegions(TileType tileType)
     {
         List<List<Coordinate>> regions = new List<List<Coordinate>>();
         int[,] checkedTiles = new int[_width, _height];
@@ -287,7 +287,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     /// <param name="tileType">Type of tile: Wall or Room</param>
     /// <param name="threshold">Number of tiles in a region for it to not be removed</param>
-    void RemoveSmallRegions(TileType tileType, int threshold)
+    private void RemoveSmallRegions(TileType tileType, int threshold)
     {
         List<List<Coordinate>> regions = GetRegions(tileType);
         List<RoomData> survivingRooms = new List<RoomData>();
@@ -320,7 +320,7 @@ public class MapGenerator : MonoBehaviour
     /// Connects each room to the nearest other room
     /// </summary>
     /// <param name="rooms">List of surviving rooms</param>
-    void connectClosestRooms(List<RoomData> rooms)
+    private void connectClosestRooms(List<RoomData> rooms)
     {
         float minDistance = 0.0f;
         Coordinate bestTile1 = new Coordinate();
@@ -381,7 +381,7 @@ public class MapGenerator : MonoBehaviour
     /// <param name="room2">2nd room to be connected</param>
     /// <param name="tile1">1st room's tile to be connected</param>
     /// <param name="tile2">2nd room's tile to be connected</param>
-    void CreateConnection(RoomData room1, RoomData room2, Coordinate tile1, Coordinate tile2)
+    private void CreateConnection(RoomData room1, RoomData room2, Coordinate tile1, Coordinate tile2)
     {
         RoomData.ConnectRooms(room1, room2);
         Debug.DrawLine(CoordToWorldPoint(tile1), CoordToWorldPoint(tile2), Color.green, 15);
@@ -398,7 +398,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     /// <param name="center">Tile path should be cleared around</param>
     /// <param name="radius">Size of path to be cleared</param>
-    void DrawCircle(Coordinate center, int radius)
+    private void DrawCircle(Coordinate center, int radius)
     {
         for (int x = -radius; x <= radius; x++)
         {
@@ -424,7 +424,7 @@ public class MapGenerator : MonoBehaviour
     /// <param name="start">Starting coordinate of line</param>
     /// <param name="end">Ending coordinate of line</param>
     /// <returns>List coordinates in line</returns>
-    List<Coordinate> GetConnectionLine(Coordinate start, Coordinate end)
+    private List<Coordinate> GetConnectionLine(Coordinate start, Coordinate end)
     {
         List<Coordinate> line = new List<Coordinate>();
 
@@ -488,7 +488,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     /// <param name="tile">Cooridinates of tile to convert</param>
     /// <returns>Vector3 of position</returns>
-    Vector3 CoordToWorldPoint(Coordinate tile)
+    private Vector3 CoordToWorldPoint(Coordinate tile)
     {
         return new Vector3(tile.tileX * _tileSize, 1.0f, tile.tileY * _tileSize);
     }
@@ -496,7 +496,7 @@ public class MapGenerator : MonoBehaviour
     /// <summary>
     /// Sets each wall game object to active or unactive depending on whether it should be visible or not
     /// </summary>
-    void HideWalls()
+    private void HideWalls()
     {
         for (int x = 0; x < _width; x++)
         {
@@ -517,7 +517,7 @@ public class MapGenerator : MonoBehaviour
     /// <summary>
     /// Moves player to a random spawn point
     /// </summary>
-    void SpawnPlayer()
+    private void SpawnPlayer()
     {
         Coordinate spawnPoint = new Coordinate();
         System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
