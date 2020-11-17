@@ -8,8 +8,6 @@ public class PlayerMovement : MonoBehaviour
 
     public float _movementSpeed = 7000.0f; //Speed multiplier for player movement
 
-    [SerializeField] private float maximumRayLength = 40.0f;
-
     // Start is called before the first frame update
     private void Start()
     {
@@ -23,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
         if (_rb != null)
         {
             MovePlayer();
-            GetMousePosition();
+            RotateToMouse.GetMousePosition(gameObject);
         }
 
     }
@@ -56,36 +54,5 @@ public class PlayerMovement : MonoBehaviour
         }
 
         _rb.AddForce(movementDirection.normalized * _movementSpeed * Time.deltaTime);
-    }
-
-    /// <summary>
-    /// Uses a raycast to get the position of the mouse
-    /// </summary>
-    private void GetMousePosition()
-    {
-        RaycastHit hit;
-        Vector3 mousePosition = Input.mousePosition;
-        Ray rayMouse = Camera.main.ScreenPointToRay(mousePosition);
-
-        if (Physics.Raycast(rayMouse.origin, rayMouse.direction, out hit, maximumRayLength))
-        {
-            RotatePlayer(hit.point);
-        }
-        else
-        {
-            RotatePlayer(rayMouse.GetPoint(maximumRayLength));
-        }
-    }
-
-    /// <summary>
-    /// Rotates the player in the Y axis to look at a given world point
-    /// </summary>
-    /// <param name="destination">Point to look at</param>
-    private void RotatePlayer(Vector3 destination)
-    {
-        Vector3 direction = destination - transform.position;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        rotation.Set(0.0f, rotation.y, 0.0f, rotation.w);
-        transform.localRotation = Quaternion.Lerp(transform.rotation, rotation, 1);
     }
 }
