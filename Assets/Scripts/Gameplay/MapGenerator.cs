@@ -79,11 +79,11 @@ public class MapGenerator : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            GenerateMap();
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    GenerateMap();
 
-        }
+        //}
     }
 
     /// <summary>

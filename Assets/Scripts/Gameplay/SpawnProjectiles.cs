@@ -22,7 +22,7 @@ public class SpawnProjectiles : MonoBehaviour
     {
         timePassed += Time.deltaTime;
         //Debug.Log(timePassed);
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(0))
         {
             SpawnParticle();
         }
