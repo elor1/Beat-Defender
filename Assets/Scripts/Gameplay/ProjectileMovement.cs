@@ -20,4 +20,16 @@ public class ProjectileMovement : MonoBehaviour
             transform.position += transform.forward * speed * Time.deltaTime;
         }
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        Debug.Log("ENTER");
+        if (other.gameObject.tag == "Enemy")
+        {
+            //Decrease enemy health
+        }
+
+        speed = 0.0f;
+        Destroy(gameObject);
+    }
 }
