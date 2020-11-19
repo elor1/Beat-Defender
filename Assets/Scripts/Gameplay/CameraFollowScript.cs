@@ -9,13 +9,13 @@ public class CameraFollowScript : MonoBehaviour
     public static GameObject _target; //Object camera will follow
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
 
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         transform.position = new Vector3(_target.transform.position.x, _target.transform.position.y + _offsetY, _target.transform.position.z + _offsetZ);
     }

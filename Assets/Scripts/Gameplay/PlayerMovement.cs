@@ -9,19 +9,19 @@ public class PlayerMovement : MonoBehaviour
     public float _movementSpeed = 7000.0f; //Speed multiplier for player movement
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _rb = GetComponent<Rigidbody>(); //Get rigidbody component
 
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (_rb != null)
         {
             MovePlayer();
-            //RotatePlayer();
+            RotateToMouse.GetMousePosition(gameObject);
         }
 
     }
@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Moves the player's position based on user input
     /// </summary>
-    void MovePlayer()
+    private void MovePlayer()
     {
         Vector3 movementDirection = new Vector3(0.0f, 0.0f, 0.0f); //Vector calculating overall direction for player this frame
 

@@ -6,19 +6,19 @@ using UnityEngine.SceneManagement;
 public class SceneManager : MonoBehaviour
 {
 
-    void Awake()
+    private void Awake()
     {
         DontDestroyOnLoad(transform.gameObject);//Stop SceneManager from being destroyed when switching scenes
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
     }
