@@ -23,13 +23,18 @@ public class ProjectileMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log("ENTER");
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Wall")
         {
-            //Decrease enemy health
-        }
+            Debug.Log("ENTER");
+            if (other.gameObject.tag == "Enemy")
+            {
+                //Decrease enemy health
+            }
 
-        speed = 0.0f;
-        Destroy(gameObject);
+            speed = 0.0f;
+            Destroy(gameObject);
+        }
+        
+
     }
 }

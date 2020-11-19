@@ -14,7 +14,7 @@ public class SpawnProjectiles : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -34,8 +34,9 @@ public class SpawnProjectiles : MonoBehaviour
         if (firePoint != null && timePassed >= fireRate)
         {
             particle = Instantiate(particleToSpawn, firePoint.transform.position, Quaternion.identity);
-            RotateToMouse.GetMousePosition(particle);
 
+            RotateToMouse.GetMousePosition(particle);
+            //Physics.IgnoreCollision(particle.GetComponent<BoxCollider>(), GetComponentInChildren<SphereCollider>()); //Ignore collisions with character who shot projectile
             timePassed = 0.0f;
         }
         timePassed += Time.deltaTime;
