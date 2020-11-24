@@ -24,6 +24,7 @@ public class ProjectileMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+
         Debug.Log(other.gameObject.tag);
         if (other.gameObject.tag == "Wall")
         {
