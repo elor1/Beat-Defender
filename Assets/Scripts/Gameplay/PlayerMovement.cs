@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    Rigidbody _rb; //Player's rigidbody component
+    private Rigidbody _rb; //Player's rigidbody component
+    private SpawnProjectiles _projectileSpawner;
 
     public float _movementSpeed = 7000.0f; //Speed multiplier for player movement
 
@@ -12,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody>(); //Get rigidbody component
+        _projectileSpawner = GetComponent<SpawnProjectiles>();
 
     }
 
@@ -24,6 +26,15 @@ public class PlayerMovement : MonoBehaviour
             RotateToMouse.GetMousePosition(gameObject);
         }
 
+       
+    }
+
+    private void LateUpdate()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            _projectileSpawner.SpawnParticle();
+        }
     }
 
     /// <summary>

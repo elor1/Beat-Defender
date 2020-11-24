@@ -5,40 +5,41 @@ using UnityEngine;
 public class SpawnProjectiles : MonoBehaviour
 {
 
-    public GameObject firePoint;
+    public GameObject _firePoint;
 
-    public float fireRate = 0.002f;
-    private float timePassed = 0.0f;
+    public float _fireRate = 0.002f;
+    private float _timePassed = 0.0f;
 
     [SerializeField] private GameObject particleToSpawn;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    private void Update()
     {
-        timePassed += Time.deltaTime;
+        _timePassed += Time.deltaTime;
         //Debug.Log(timePassed);
-        if (Input.GetMouseButton(0))
-        {
-            SpawnParticle();
-        }
+        //if (Input.GetMouseButton(0))
+        //{
+        //    SpawnParticle();
+        //}
+      
     }
 
-    private void SpawnParticle()
+    public void SpawnParticle()
     {
         GameObject particle;
-        if (firePoint != null && timePassed >= fireRate)
+        if (_firePoint != null && _timePassed >= _fireRate)
         {
-            particle = Instantiate(particleToSpawn, firePoint.transform.position, Quaternion.identity);
-
+            particle = Instantiate(particleToSpawn, _firePoint.transform.position, Quaternion.identity);
+            particle.GetComponent<ProjectileMovement>()._owner = gameObject;
             RotateToMouse.GetMousePosition(particle);
-            //Physics.IgnoreCollision(particle.GetComponent<BoxCollider>(), GetComponentInChildren<SphereCollider>()); //Ignore collisions with character who shot projectile
-            timePassed = 0.0f;
+
+            _timePassed = 0.0f;
         }
-        timePassed += Time.deltaTime;
+        _timePassed += Time.deltaTime;
     }
 }

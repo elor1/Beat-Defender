@@ -4,37 +4,49 @@ using UnityEngine;
 
 public class ProjectileMovement : MonoBehaviour
 {
-    public float speed;
+    public float _speed = 30.0f;
+    public GameObject _owner; //Who fired the projectile
     //public float fireRate;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (speed >= 0.0f)
+        if (_speed >= 0.0f)
         {
-            transform.position += transform.forward * speed * Time.deltaTime;
+            transform.position += transform.forward * _speed * Time.deltaTime;
         }
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Wall")
+
+        Debug.Log(other.gameObject.tag);
+        if (other.gameObject.tag == "Wall")
         {
-            Debug.Log("ENTER");
-            if (other.gameObject.tag == "Enemy")
-            {
-                //Decrease enemy health
-            }
-
-            speed = 0.0f;
-            Destroy(gameObject);
+            DestroyProjectile();
         }
-        
 
+        if (other.gameObject.tag == "Enemy" && _owner.tag == "Player")
+        {
+            //Decrease enemy health
+            DestroyProjectile();
+        }
+
+        if (other.gameObject.tag == "Player" && _owner.tag == "Enemy")
+        {
+            //Decrease player health
+            DestroyProjectile();
+        }
+    }
+
+    private void DestroyProjectile()
+    {
+        _speed = 0.0f;
+        Destroy(gameObject);
     }
 }

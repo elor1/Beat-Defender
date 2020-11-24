@@ -25,13 +25,13 @@ public class MapGenerator : MonoBehaviour
 
     [SerializeField] private int _wallPercent = 45; //Chance that a tile will be a wall
 
-    [SerializeField] private int _width; //Width of map
-    [SerializeField] private int _height; //Height of map
+    public static int _width = 80; //Width of map
+    public static int _height = 60; //Height of map
 
-    public TileType[,] _mapGrid; //Wall data for each tile
+    public static TileType[,] _mapGrid; //Wall data for each tile
     public GameObject[,] _walls; //Stores each instance of a wall
-    [SerializeField] private int _tileSize = 1; //Size of each tile in map
-    [SerializeField] private int _borderSize = 7; //Number of wall blocks around each edge. Used so that the camera can't see over the edge of the world
+    public static int _tileSize = 1; //Size of each tile in map
+    public static int _borderSize = 7; //Number of wall blocks around each edge. Used so that the camera can't see over the edge of the world
     [SerializeField] private int _smoothIterations = 20; //Number of times the SmootWalls method is called when generating a new map
 
     private int _wallThreshold; //Any wall regions with a smaller number of tiles than this will be removed from the map
@@ -345,12 +345,12 @@ public class MapGenerator : MonoBehaviour
                     break;
                 }
 
-                for (int tileIndex1 = 0; tileIndex1 < room1.edgeTiles.Count; tileIndex1++)
+                for (int tileIndex1 = 0; tileIndex1 < room1._edgeTiles.Count; tileIndex1++)
                 {
-                    for (int tileIndex2 = 0; tileIndex2 < room2.edgeTiles.Count; tileIndex2++)
+                    for (int tileIndex2 = 0; tileIndex2 < room2._edgeTiles.Count; tileIndex2++)
                     {
-                        Coordinate tile1 = room1.edgeTiles[tileIndex1];
-                        Coordinate tile2 = room2.edgeTiles[tileIndex2];
+                        Coordinate tile1 = room1._edgeTiles[tileIndex1];
+                        Coordinate tile2 = room2._edgeTiles[tileIndex2];
                         int distance = (tile1.tileX - tile2.tileX) * (tile1.tileX - tile2.tileX) + (tile1.tileY - tile2.tileY) * (tile1.tileY - tile2.tileY);
 
                         if (distance < minDistance || !connectionFound)
