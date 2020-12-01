@@ -16,7 +16,7 @@ public class RoomData
     /// </summary>
     /// <param name="roomTiles">List of coordinates of tiles in room</param>
     /// <param name="mapGrid">Array of TileTypes with map grid data</param>
-    public RoomData(List<MapGenerator.Coordinate> roomTiles, MapGenerator.TileType[,] mapGrid)
+    public RoomData(List<MapGenerator.Coordinate> roomTiles, Tile[,] mapGrid)
     {
         _tiles = roomTiles;
         _roomSize = _tiles.Count;
@@ -31,7 +31,7 @@ public class RoomData
                 {
                     if (x == tile.tileX || y == tile.tileY)
                     {
-                        if (mapGrid[x, y] == MapGenerator.TileType.Wall)
+                        if (mapGrid[x, y].type == MapGenerator.TileType.Wall)
                         {
                             _edgeTiles.Add(tile);
                         }

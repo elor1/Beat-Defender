@@ -23,13 +23,15 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+
     [SerializeField] private int _wallPercent = 45; //Chance that a tile will be a wall
 
     public static int _width = 80; //Width of map
     public static int _height = 60; //Height of map
 
-    public static TileType[,] _mapGrid; //Wall data for each tile
-    public GameObject[,] _walls; //Stores each instance of a wall
+    //public static TileType[,] _mapGrid; //Wall data for each tile
+    //public GameObject[,] _walls; //Stores each instance of a wall
+    public static Tile[,] _mapGrid;
     public static int _tileSize = 1; //Size of each tile in map
     public static int _borderSize = 7; //Number of wall blocks around each edge. Used so that the camera can't see over the edge of the world
     [SerializeField] private int _smoothIterations = 20; //Number of times the SmootWalls method is called when generating a new map
@@ -50,7 +52,17 @@ public class MapGenerator : MonoBehaviour
         _roomThreshold = (_width * _height) / 150;
         _width += _borderSize * 2;
         _height += _borderSize * 2;
-        _mapGrid = new TileType[_width, _height];
+        //_mapGrid = new TileType[_width, _height];
+        _mapGrid = new Tile[_width, _height];
+        for (int x = 0; x < _width; x++)
+        {
+            for (int y = 0; y < _height; y++)
+            {
+                _mapGrid[x, y] = new Tile();
+                _mapGrid[x, y].coord.tileX = x;
+                _mapGrid[x, y].coord.tileY = y;
+            }
+        }
 
         //Set borders in map grid
         for (int x = 0; x < _width; x++)
@@ -59,7 +71,7 @@ public class MapGenerator : MonoBehaviour
             {
                 if (x < _borderSize || x >= _width - _borderSize || y < _borderSize || y >= _height - _borderSize)
                 {
-                    _mapGrid[x, y] = TileType.Border;
+                    _mapGrid[x, y].type = TileType.Border;
                 }
             }
         }
@@ -92,20 +104,20 @@ public class MapGenerator : MonoBehaviour
     /// <param name="x">X index</param>
     /// <param name="y">Y index</param>
     /// <returns>True or false</returns>
-    private bool IsInBounds(int x, int y)
+    public static bool IsInBounds(int x, int y)
     {
         return (x >= _borderSize && x < _width - _borderSize & y >= _borderSize && y < _height - _borderSize);
     }
 
     private void InstantiateWalls()
     {
-        _walls = new GameObject[_width, _height];
+        //_walls = new GameObject[_width, _height];
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
                 //Create a wall block for each tile in mapGrid
-                _walls[x, y] = Instantiate(_wallPrefab, new Vector3(x * _tileSize, 0.0f, y * _tileSize), Quaternion.identity) as GameObject;
+                _mapGrid[x, y].obj = Instantiate(_wallPrefab, new Vector3(x * _tileSize, 0.0f, y * _tileSize), Quaternion.identity) as GameObject;
             }
         }
     }
@@ -123,7 +135,6 @@ public class MapGenerator : MonoBehaviour
         RemoveSmallRegions(TileType.Room, _roomThreshold);
         HideWalls();
         SpawnPlayer();
-
         //gameManager.currentState = GameManager.GameState.Playing;
     }
 
@@ -143,18 +154,18 @@ public class MapGenerator : MonoBehaviour
                     if (x == _borderSize || x == _width - _borderSize - 1 || y == _borderSize || y == _height - _borderSize - 1)
                     {
                         //Always set edge tiles to walls
-                        _mapGrid[x, y] = TileType.Wall;
+                        _mapGrid[x, y].type = TileType.Wall;
                     }
                     else
                     {
                         //For each tile in the map grid, if the randomly generated number is less than the wallPercent, set its value to Wall
                         if (randomNumber.Next(0, 100) < _wallPercent)
                         {
-                            _mapGrid[x, y] = TileType.Wall;
+                            _mapGrid[x, y].type = TileType.Wall;
                         }
                         else
                         {
-                            _mapGrid[x, y] = TileType.Room;
+                            _mapGrid[x, y].type = TileType.Room;
                         }
                     }
                 }
@@ -175,10 +186,10 @@ public class MapGenerator : MonoBehaviour
         {
             for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++)
             {
-                if ((neighbourX != gridX || neighbourY != gridY) && (_mapGrid[neighbourX, neighbourY] != TileType.Room))
+                if ((neighbourX != gridX || neighbourY != gridY) && (_mapGrid[neighbourX, neighbourY].type != TileType.Room))
                 {
                         //If the given tile is within the bounds of the map, for each of its surrounding tiles, add its grid value to wallCount
-                        wallCount += (int)_mapGrid[neighbourX, neighbourY];
+                        wallCount += (int)_mapGrid[neighbourX, neighbourY].type;
                 }
             }
         }
@@ -202,11 +213,11 @@ public class MapGenerator : MonoBehaviour
 
                     if (surroundingWallCount > 4)
                     {
-                        _mapGrid[x, y] = TileType.Wall;
+                        _mapGrid[x, y].type = TileType.Wall;
                     }
                     else if (surroundingWallCount < 4)
                     {
-                        _mapGrid[x, y] = TileType.Room;
+                        _mapGrid[x, y].type = TileType.Room;
                     }
                 }
             }
@@ -223,7 +234,7 @@ public class MapGenerator : MonoBehaviour
     {
         List<Coordinate> tiles = new List<Coordinate>();
         int[,] checkedTiles = new int[_width, _height];
-        TileType tileType = _mapGrid[startX, startY];
+        TileType tileType = _mapGrid[startX, startY].type;
 
         Queue<Coordinate> fillQueue = new Queue<Coordinate>();
         fillQueue.Enqueue(new Coordinate(startX, startY));
@@ -240,7 +251,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     if (IsInBounds(x, y) && (y == tile.tileY || x == tile.tileX))
                     {
-                        if (checkedTiles[x, y] == 0 && _mapGrid[x, y] == tileType)
+                        if (checkedTiles[x, y] == 0 && _mapGrid[x, y].type == tileType)
                         {
                             checkedTiles[x, y] = 1;
                             fillQueue.Enqueue(new Coordinate(x, y));
@@ -267,7 +278,7 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = 0; y < _height; y++)
             {
-                if (checkedTiles[x, y] == 0 && _mapGrid[x, y] == tileType)
+                if (checkedTiles[x, y] == 0 && _mapGrid[x, y].type == tileType)
                 {
                     List<Coordinate> newRegion = GetRegionTiles(x, y);
                     regions.Add(newRegion);
@@ -299,11 +310,11 @@ public class MapGenerator : MonoBehaviour
                 {
                     if (tileType == TileType.Wall)
                     {
-                        _mapGrid[tile.tileX, tile.tileY] = TileType.Room;
+                        _mapGrid[tile.tileX, tile.tileY].type = TileType.Room;
                     }
                     else
                     {
-                        _mapGrid[tile.tileX, tile.tileY] = TileType.Wall;
+                        _mapGrid[tile.tileX, tile.tileY].type = TileType.Wall;
                     }
                 }
             }
@@ -411,7 +422,7 @@ public class MapGenerator : MonoBehaviour
                     int yPoint = center.tileY + y;
                     if (IsInBounds(xPoint, yPoint))
                     {
-                        _mapGrid[xPoint, yPoint] = TileType.Room;
+                        _mapGrid[xPoint, yPoint].type = TileType.Room;
                     }
                 }
             }
@@ -502,13 +513,13 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = 0; y < _height; y++)
             {
-                if (_mapGrid[x, y] == TileType.Room)
+                if (_mapGrid[x, y].type == TileType.Room)
                 {
-                    _walls[x, y].SetActive(false);
+                    _mapGrid[x, y].obj.SetActive(false);
                 }
                 else
                 {
-                    _walls[x, y].SetActive(true);
+                    _mapGrid[x, y].obj.SetActive(true);
                 }
             }
         }
@@ -523,7 +534,7 @@ public class MapGenerator : MonoBehaviour
         System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
 
         //Generate random spawn points until one is found within the walls
-        while (_mapGrid[spawnPoint.tileX, spawnPoint.tileY] != TileType.Room)
+        while (_mapGrid[spawnPoint.tileX, spawnPoint.tileY].type != TileType.Room)
         {
             Debug.Log("New spawn point");
             spawnPoint.tileX = randomNumber.Next(0 + _borderSize, _width - _borderSize - 1);
