@@ -41,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
             bool isNearPlayer = true;
 
             //Generate random spawn points until one is found that isn't too close to the player or in a wall
-            while (MapGenerator._mapGrid[spawnPoint.tileX, spawnPoint.tileY] != MapGenerator.TileType.Room || isNearPlayer)
+            while (MapGenerator._mapGrid[spawnPoint.tileX, spawnPoint.tileY].type != MapGenerator.TileType.Room || isNearPlayer || !MapGenerator.IsInBounds(spawnPoint.tileX, spawnPoint.tileY))
             {
                 isNearPlayer = false;
 
