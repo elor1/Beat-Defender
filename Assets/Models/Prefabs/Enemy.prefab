@@ -264,6 +264,7 @@ GameObject:
   - component: {fileID: 8511741250870701161}
   - component: {fileID: 7696632244655912872}
   - component: {fileID: 1500141386130520051}
+  - component: {fileID: 8512225526299717217}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -301,7 +302,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!114 &7696632244655912872
 MonoBehaviour:
@@ -331,3 +332,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 11400000, guid: 79e3ac91f8bfe3c4eb92c3bae67aaa7f, type: 2}
+  _playerRadius: 10
+--- !u!114 &8512225526299717217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8159960540328174055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b864a61520a7cb4e9b4ee4b1db94966, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

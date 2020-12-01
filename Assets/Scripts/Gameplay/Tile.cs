@@ -10,10 +10,11 @@ public class Tile
     public int hCost = 0;
     public int gCost = 0;
     public Tile parent = null;
+    public int neighbourWalls = 0;
 
     public int fCost()
     {
-        return gCost + hCost;
+        return gCost + hCost + (neighbourWalls * 5);
     }
 
     public bool isEqual(Tile other)

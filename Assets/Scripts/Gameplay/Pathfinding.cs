@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pathfinding
+public class Pathfinding : MonoBehaviour
 {
 
     //public static List<Tile> FindPath(GameObject obj, GameObject target)
@@ -279,20 +279,172 @@ public class Pathfinding
     //    }
     //    return path;
     //}
+    Tile[,] _nodes;
 
-    public static List<Tile> FindPath(GameObject obj, GameObject target)
+    private void Start()
     {
+        _nodes = new Tile[MapGenerator._width, MapGenerator._height];
         for (int x = 0; x < MapGenerator._width; x++)
         {
             for (int y = 0; y < MapGenerator._height; y++)
             {
-                MapGenerator._mapGrid[x, y].gCost = 0;
-                MapGenerator._mapGrid[x, y].hCost = 0;
+                Tile tile = new Tile();
+                tile.coord.tileX = x;
+                tile.coord.tileY = y;
+                tile.type = MapGenerator._mapGrid[x, y].type;
+                _nodes[x, y] = tile;
             }
         }
 
-        Tile start = MapGenerator._mapGrid[(int)obj.transform.position.x, (int)obj.transform.position.z];
-        Tile goal = MapGenerator._mapGrid[(int)target.transform.position.x, (int)target.transform.position.z];
+        for (int x = 0; x < MapGenerator._width; x++)
+        {
+            for (int y = 0; y < MapGenerator._height; y++)
+            {
+                for (int i = -5; i <= 5; i++)
+                {
+                    for (int j = -5; j <= 5; j++)
+                    {
+                        if (i == 0 && j == 0)
+                        {
+                            continue;
+                        }
+                        if (!MapGenerator.IsInBounds(x + i, y + j))
+                        {
+                            continue;
+                        }
+                        if (_nodes[x + i, y + j].type != MapGenerator.TileType.Room)
+                        {
+                            _nodes[x, y].neighbourWalls++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //public List<Tile> FindPath(GameObject obj, GameObject target)
+    //{
+
+    //    Tile start = _nodes[(int)obj.transform.position.x, (int)obj.transform.position.z];
+    //    Tile goal = _nodes[(int)target.transform.position.x, (int)target.transform.position.z];
+
+    //    List<Tile> openList = new List<Tile>();
+    //    List<Tile> closedList = new List<Tile>();
+    //    openList.Add(start);
+
+    //    while (openList.Count > 0)
+    //    {
+    //        Tile bestTile = GetBestTile(openList);
+    //        if (bestTile.isEqual(goal))
+    //        {
+    //            Debug.Log("PATH FOUND!");
+    //            return CreatePath(bestTile);
+    //        }
+
+    //        closedList.Add(bestTile);
+    //        openList.Remove(bestTile);
+
+    //        for (int x = -1; x <= 1; x++)
+    //        {
+    //            for (int y = -1; y <= 1; y++)
+    //            {
+    //                if (!MapGenerator.IsInBounds(bestTile.coord.tileX + x, bestTile.coord.tileY + y))
+    //                {
+    //                    continue;
+    //                }
+
+    //                Tile neighbour = _nodes[bestTile.coord.tileX + x, bestTile.coord.tileY + y];
+
+    //                if (neighbour.type != MapGenerator.TileType.Room)
+    //                {
+    //                    continue;
+    //                }
+
+    //                if (closedList.Contains(neighbour))
+    //                {
+    //                    continue;
+    //                }
+
+    //                int cost = bestTile.gCost + CalculateDistance(bestTile, neighbour);
+
+    //                if (openList.Contains(neighbour) && cost < neighbour.gCost)
+    //                {
+    //                    openList.Remove(neighbour);
+    //                }
+
+    //                if (closedList.Contains(neighbour) && cost < neighbour.gCost)
+    //                {
+    //                    closedList.Remove(neighbour);
+    //                }
+
+    //                if (!openList.Contains(neighbour) && !closedList.Contains(neighbour))
+    //                {
+    //                    openList.Add(neighbour);
+    //                    neighbour.gCost = cost;
+    //                    neighbour.hCost = CalculateDistance(neighbour, goal);
+    //                    //neighbour.parent = bestTile;
+    //                }
+
+    //                //if (cost < neighbour.gCost || !openList.Contains(neighbour))
+    //                //{
+    //                //    neighbour.gCost = cost;
+    //                //    neighbour.hCost = CalculateDistance(neighbour, goal);
+    //                //    neighbour.parent = bestTile;
+    //                //}
+    //            }
+    //        }
+    //    }
+    //    Debug.LogError("Path not found");
+    //    return null;
+    //}
+
+    //private Tile GetBestTile(List<Tile> openList)
+    //{
+    //    Tile best = null;
+
+    //    if (openList.Count > 0)
+    //    {
+    //        best = openList[0];
+
+    //        foreach (Tile t in openList)
+    //        {
+    //            if (t.fCost() <= best.fCost())
+    //            {
+    //                if (t.hCost < best.hCost)
+    //                {
+    //                    best = t;
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    return best;
+    //}
+
+    //public int CalculateDistance(Tile start, Tile end)
+    //{
+    //    return Mathf.Max(Mathf.Abs(start.coord.tileX - end.coord.tileX), Mathf.Abs(start.coord.tileY - end.coord.tileY));
+    //}
+
+    //public List<Tile> CreatePath(Tile currentTile)
+    //{
+    //    List<Tile> path = new List<Tile>();
+    //    path.Add(currentTile);
+
+    //    while (currentTile.parent != null)
+    //    {
+    //        currentTile = currentTile.parent;
+    //        path.Add(currentTile);
+    //    }
+    //    path.Reverse();
+    //    return path;
+    //}
+
+    public List<Tile> FindPath(GameObject obj, GameObject target)
+    {
+
+        Tile start = _nodes[(int)obj.transform.position.x, (int)obj.transform.position.z];
+        Tile goal = _nodes[(int)target.transform.position.x, (int)target.transform.position.z];
 
         List<Tile> openList = new List<Tile>();
         List<Tile> closedList = new List<Tile>();
@@ -300,54 +452,43 @@ public class Pathfinding
 
         while (openList.Count > 0)
         {
-            Tile bestTile = GetBestTile(openList);
-            if (bestTile.isEqual(goal))
+            Tile currentTile = openList[0];
+            for (int i = 1; i < openList.Count; i++)
             {
-                Debug.Log("PATH FOUND!");
-                return CreatePath(bestTile);
+                if (openList[i].fCost() < currentTile.fCost() || openList[i].fCost() == currentTile.fCost())
+                {
+                    if (openList[i].hCost < currentTile.hCost)
+                    {
+                        currentTile = openList[i];
+                    }
+                }
             }
 
-            closedList.Add(bestTile);
-            openList.Remove(bestTile);
+            openList.Remove(currentTile);
+            closedList.Add(currentTile);
 
-            for (int x = -1; x <= 1; x++)
+            if (currentTile.isEqual(goal))
             {
-                for (int y = -1; y <= 1; y++)
+                return CreatePath(start, goal);
+            }
+
+            foreach (Tile neighbour in GetNeighbours(currentTile))
+            {
+                if (neighbour.type != MapGenerator.TileType.Room || closedList.Contains(neighbour))
                 {
-                    if (!MapGenerator.IsInBounds(bestTile.coord.tileX + x, bestTile.coord.tileY + y))
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    Tile neighbour = MapGenerator._mapGrid[bestTile.coord.tileX + x, bestTile.coord.tileY + y];
+                int cost = currentTile.gCost + CalculateDistance(currentTile, neighbour);
+                if (cost < neighbour.gCost || !openList.Contains(neighbour))
+                {
+                    neighbour.gCost = cost;
+                    neighbour.hCost = CalculateDistance(neighbour, goal);
+                    neighbour.parent = currentTile;
 
-                    if (neighbour.type != MapGenerator.TileType.Room)
-                    {
-                        continue;
-                    }
-                    
-                    if (closedList.Contains(neighbour))
-                    {
-                        continue;
-                    }
-
-                    int cost = bestTile.gCost + CalculateDistance(bestTile, neighbour);
-
-                    if (openList.Contains(neighbour) && cost < neighbour.gCost)
-                    {
-                        openList.Remove(neighbour);
-                    }
-
-                    if (closedList.Contains(neighbour) && cost < neighbour.gCost)
-                    {
-                        closedList.Remove(neighbour);
-                    }
-
-                    if (!openList.Contains(neighbour) && !closedList.Contains(neighbour))
+                    if (!openList.Contains(neighbour))
                     {
                         openList.Add(neighbour);
-                        neighbour.gCost = cost;
-                        neighbour.hCost = CalculateDistance(neighbour, goal);
                     }
                 }
             }
@@ -356,41 +497,50 @@ public class Pathfinding
         return null;
     }
 
-    private static Tile GetBestTile(List<Tile> openList)
+    private List<Tile> GetNeighbours(Tile tile)
     {
-        Tile best = null;
+        List<Tile> neighbours = new List<Tile>();
 
-        if (openList.Count > 0)
+        for (int x = -1; x <= 1; x++)
         {
-            best = openList[0];
-
-            foreach (Tile t in openList)
+            for (int y = -1; y <= 1; y++)
             {
-                if (t.fCost() < best.fCost())
+                if (x == 0 && y == 0)
                 {
-                    best = t;
+                    continue;
+                }
+
+                if (MapGenerator.IsInBounds(tile.coord.tileX + x, tile.coord.tileY + y))
+                {
+                    neighbours.Add(_nodes[tile.coord.tileX + x, tile.coord.tileY + y]);
                 }
             }
         }
-
-        return best;
+        return neighbours;
     }
 
-    public static int CalculateDistance(Tile start, Tile end)
+    private int CalculateDistance(Tile tileA, Tile tileB)
     {
-        return Mathf.Max(Mathf.Abs(start.coord.tileX - end.coord.tileX), Mathf.Abs(start.coord.tileY - end.coord.tileY));
+        int distanceX = Mathf.Abs(tileA.coord.tileX - tileB.coord.tileX);
+        int distanceY = Mathf.Abs(tileA.coord.tileY - tileB.coord.tileY);
+
+        if (distanceX > distanceY)
+            return 14 * distanceY + 10 * (distanceX - distanceY);
+        return 14 * distanceX + 10 * (distanceY - distanceX);
     }
 
-    public static List<Tile> CreatePath(Tile currentTile)
+    private List<Tile> CreatePath(Tile start, Tile end)
     {
         List<Tile> path = new List<Tile>();
-        path.Add(currentTile);
+        Tile currentTile = end;
 
-        while (currentTile.parent != null)
+        while (currentTile != start)
         {
-            currentTile = currentTile.parent;
             path.Add(currentTile);
+            currentTile = currentTile.parent;
         }
+
+        path.Reverse();
         return path;
     }
 }

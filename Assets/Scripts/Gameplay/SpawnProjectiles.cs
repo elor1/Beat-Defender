@@ -36,7 +36,8 @@ public class SpawnProjectiles : MonoBehaviour
         {
             particle = Instantiate(particleToSpawn, _firePoint.transform.position, Quaternion.identity);
             particle.GetComponent<ProjectileMovement>()._owner = gameObject;
-            RotateToMouse.GetMousePosition(particle);
+            //RotateToMouse.GetMousePosition(particle);
+            particle.transform.forward = gameObject.transform.forward;
 
             _timePassed = 0.0f;
         }
