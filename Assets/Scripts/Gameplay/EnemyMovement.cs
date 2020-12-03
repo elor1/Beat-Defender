@@ -7,7 +7,8 @@ public class EnemyMovement : MonoBehaviour
     private GameObject _player;
 
     private Rigidbody _rb;
-    [SerializeField] private EnemyData _enemyData;
+    public EnemyData _enemyData;
+    public int _health;
 
     private Pathfinding _pathfinding;
     private List<Tile> _pathToPlayer;
@@ -27,6 +28,18 @@ public class EnemyMovement : MonoBehaviour
         _pathToPlayer = new List<Tile>();
 
         _projectileSpawner = GetComponent<SpawnProjectiles>();
+
+        _health = _enemyData._health;
+    }
+
+    private void Update()
+    {
+        if (_health <= 0)
+        {
+            //Enemy is dead
+            Destroy(gameObject);
+            EnemySpawner._aliveEnemies--;
+        }
     }
 
     // Update is called once per frame

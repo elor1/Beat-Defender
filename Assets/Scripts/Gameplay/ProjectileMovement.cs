@@ -34,14 +34,30 @@ public class ProjectileMovement : MonoBehaviour
         if (other.gameObject.tag == "Enemy" && _owner.tag == "Player")
         {
             //Decrease enemy health
+            EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
+            if (enemyMovement)
+            {
+                ProjectileDamage.DecreaseHealth(ref enemyMovement._health, GameManager._playerDamage);
+            }
+                
             DestroyProjectile();
         }
 
-        if (other.gameObject.tag == "Player" && _owner.tag == "Enemy")
+        if (other != null && _owner != null)
         {
-            //Decrease player health
-            DestroyProjectile();
+            if (other.gameObject.tag == "Player" && _owner.tag == "Enemy")
+            {
+                //Decrease player health
+                EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
+                if (enemyMovement)
+                {
+                    ProjectileDamage.DecreaseHealth(ref GameManager._playerHealth, enemyMovement._enemyData._damage);
+                }
+
+                DestroyProjectile();
+            }
         }
+        
     }
 
     private void DestroyProjectile()

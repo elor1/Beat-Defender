@@ -20,21 +20,26 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (_rb != null)
+        if (GameManager._currentGameState == GameManager.State.Playing)
         {
-            MovePlayer();
-            RotateToMouse.GetMousePosition(gameObject);
+            if (_rb != null)
+            {
+                MovePlayer();
+                RotateToMouse.GetMousePosition(gameObject);
+            }
         }
-
-       
     }
 
     private void LateUpdate()
     {
-        if (Input.GetMouseButton(0))
+        if (GameManager._currentGameState == GameManager.State.Playing)
         {
-            _projectileSpawner.SpawnParticle();
+            if (Input.GetMouseButton(0))
+            {
+                _projectileSpawner.SpawnParticle();
+            }
         }
+            
     }
 
     /// <summary>
