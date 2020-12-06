@@ -530,6 +530,14 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     private void SpawnPlayer()
     {
+        Coordinate spawnPoint = GetRandomRoomTile();
+
+        //Move player to new spawn point
+        _playerModel.transform.position = new Vector3(spawnPoint.tileX * _tileSize, 0.0f, spawnPoint.tileY * _tileSize);
+    }
+
+    public static Coordinate GetRandomRoomTile()
+    {
         Coordinate spawnPoint = new Coordinate();
         System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
 
@@ -541,7 +549,6 @@ public class MapGenerator : MonoBehaviour
             spawnPoint.tileY = randomNumber.Next(0 + _borderSize, _height - _borderSize - 1);
         }
 
-        //Move player to new spawn point
-        _playerModel.transform.position = new Vector3(spawnPoint.tileX * _tileSize, 0.0f, spawnPoint.tileY * _tileSize);
+        return spawnPoint;
     }
 }

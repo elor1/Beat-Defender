@@ -20,21 +20,27 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (_rb != null)
+        if (GameManager._currentGameState == GameManager.State.Playing)
         {
-            MovePlayer();
-            RotateToMouse.GetMousePosition(gameObject);
+            if (_rb != null)
+            {
+                MovePlayer();
+                RotateToMouse.GetMousePosition(gameObject);
+            }
         }
-
-       
     }
 
     private void LateUpdate()
     {
-        if (Input.GetMouseButton(0))
+        if (GameManager._currentGameState == GameManager.State.Playing)
         {
-            _projectileSpawner.SpawnParticle();
+            if (Input.GetMouseButton(0))
+            {
+                Color particleColour = new Color(Random.Range(0.149f, 0.404f), Random.Range(0.906f, 0.945f), Random.Range(0.267f, 0.694f), 1.0f);
+                _projectileSpawner.SpawnParticle(particleColour);
+            }
         }
+            
     }
 
     /// <summary>

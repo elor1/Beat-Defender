@@ -9,7 +9,7 @@ public class EnemySpawner : MonoBehaviour
     public float _spawnDelay = 5.0f; //Time between each enemy is spawned
     private float _spawnTimer = 0.0f;
     public int _maxEnemies = 20; //Maximum number of enemies to be alive at one time
-    public int _aliveEnemies = 0; //Current number of enemies alive
+    public static int _aliveEnemies = 0; //Current number of enemies alive
     [SerializeField] private float _playerRadius = 35.0f; //Radius around player where enemies can't spawn
 
     // Start is called before the first frame update

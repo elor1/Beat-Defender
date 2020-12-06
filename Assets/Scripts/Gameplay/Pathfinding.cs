@@ -279,7 +279,7 @@ public class Pathfinding : MonoBehaviour
     //    }
     //    return path;
     //}
-    Tile[,] _nodes;
+    public Tile[,] _nodes;
 
     private void Start()
     {
@@ -440,11 +440,11 @@ public class Pathfinding : MonoBehaviour
     //    return path;
     //}
 
-    public List<Tile> FindPath(GameObject obj, GameObject target)
+    public List<Tile> FindPath(Vector3 obj, Vector3 target)
     {
 
-        Tile start = _nodes[(int)obj.transform.position.x, (int)obj.transform.position.z];
-        Tile goal = _nodes[(int)target.transform.position.x, (int)target.transform.position.z];
+        Tile start = _nodes[(int)obj.x, (int)obj.z];
+        Tile goal = _nodes[(int)target.x, (int)target.z];
 
         List<Tile> openList = new List<Tile>();
         List<Tile> closedList = new List<Tile>();

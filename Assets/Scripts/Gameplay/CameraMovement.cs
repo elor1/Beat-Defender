@@ -35,6 +35,7 @@ public class CameraMovement : MonoBehaviour
         {
             if (_scenePauseTime <= 0.0f)
             {
+                GameManager._currentGameState = GameManager.State.Playing;
                 SceneManager.SwitchScene("GameScene");
             }
             else
