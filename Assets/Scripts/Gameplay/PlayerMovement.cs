@@ -36,7 +36,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                _projectileSpawner.SpawnParticle();
+                Color particleColour = new Color(Random.Range(0.149f, 0.404f), Random.Range(0.906f, 0.945f), Random.Range(0.267f, 0.694f), 1.0f);
+                _projectileSpawner.SpawnParticle(particleColour);
             }
         }
             

@@ -48,7 +48,7 @@ public class ProjectileMovement : MonoBehaviour
             if (other.gameObject.tag == "Player" && _owner.tag == "Enemy")
             {
                 //Decrease player health
-                EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
+                EnemyMovement enemyMovement = _owner.gameObject.GetComponent<EnemyMovement>();
                 if (enemyMovement)
                 {
                     ProjectileDamage.DecreaseHealth(ref GameManager._playerHealth, enemyMovement._enemyData._damage);
