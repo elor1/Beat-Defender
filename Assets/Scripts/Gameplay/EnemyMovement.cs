@@ -50,6 +50,7 @@ public class EnemyMovement : MonoBehaviour
             //Enemy is dead
             Destroy(gameObject);
             EnemySpawner._aliveEnemies--;
+            Destroy(this);
         }
     }
 
@@ -86,7 +87,7 @@ public class EnemyMovement : MonoBehaviour
 
                     if (_pathToPlayer.Count == 0)
                     {
-                        _pathToPlayer.Clear();
+                       // _pathToPlayer.Clear();
                         _pathToPlayer = _pathfinding.FindPath(gameObject.transform.position, _player.transform.position);
                     }
                     else
@@ -152,7 +153,7 @@ public class EnemyMovement : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             //_collision = true;
-            _pathToPlayer.Clear();
+            //_pathToPlayer.Clear();
             MapGenerator.Coordinate randomCoord = MapGenerator.GetRandomRoomTile();
             _pathToPlayer = _pathfinding.FindPath(gameObject.transform.position, new Vector3(randomCoord.tileX, 0.0f, randomCoord.tileY));
         }

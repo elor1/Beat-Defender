@@ -280,7 +280,6 @@ public class Pathfinding : MonoBehaviour
     //    return path;
     //}
     public Tile[,] _nodes;
-
     private void Start()
     {
         _nodes = new Tile[MapGenerator._width, MapGenerator._height];
@@ -442,12 +441,11 @@ public class Pathfinding : MonoBehaviour
 
     public List<Tile> FindPath(Vector3 obj, Vector3 target)
     {
-
         Tile start = _nodes[(int)obj.x, (int)obj.z];
         Tile goal = _nodes[(int)target.x, (int)target.z];
 
         List<Tile> openList = new List<Tile>();
-        List<Tile> closedList = new List<Tile>();
+        HashSet<Tile> closedList = new HashSet<Tile>();
         openList.Add(start);
 
         while (openList.Count > 0)
