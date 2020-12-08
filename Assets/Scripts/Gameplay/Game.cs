@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    [SerializeField] private StoryData _data;
+    [SerializeField] public StoryData _data;
 
     private TextDisplay _output;
     public static BeatData _currentBeat;
     private WaitForSeconds _wait;
+
+    public static Game _singleton;
 
     //Beat ID for selected difficulties
     public enum Difficulty
@@ -22,6 +24,8 @@ public class Game : MonoBehaviour
         _output = GetComponentInChildren<TextDisplay>();
         _currentBeat = null;
         _wait = new WaitForSeconds(0.5f);
+
+        _singleton = this;
     }
 
     private void Update()
@@ -78,7 +82,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    private void DisplayBeat(int id)
+    public void DisplayBeat(int id)
     {
         BeatData data = _data.GetBeatById(id);
         StartCoroutine(DoDisplay(data));

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProjectileMovement : MonoBehaviour
 {
-    public float _speed = 30.0f;
+    public float _speed = GameManager._projectileSpeed;
     public GameObject _owner; //Who fired the projectile
     //public float fireRate;
     // Start is called before the first frame update

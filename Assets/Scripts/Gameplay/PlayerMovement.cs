@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody _rb; //Player's rigidbody component
     private SpawnProjectiles _projectileSpawner;
 
-    public float _movementSpeed = 7000.0f; //Speed multiplier for player movement
+    //public float _movementSpeed = 7000.0f; //Speed multiplier for player movement
 
     // Start is called before the first frame update
     private void Start()
@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void LateUpdate()
     {
+        //Debug.Log(GameManager._currentGameState);
         if (GameManager._currentGameState == GameManager.State.Playing)
         {
             if (Input.GetMouseButton(0))
@@ -70,6 +71,6 @@ public class PlayerMovement : MonoBehaviour
             movementDirection += new Vector3(1.0f, 0.0f, 0.0f);
         }
 
-        _rb.AddForce(movementDirection.normalized * _movementSpeed * Time.deltaTime);
+        _rb.AddForce(movementDirection.normalized * GameManager._playerSpeed * Time.deltaTime);
     }
 }

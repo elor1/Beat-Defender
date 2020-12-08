@@ -11,7 +11,7 @@ public class EnemyMovement : MonoBehaviour
     public int _health;
 
     private Pathfinding _pathfinding;
-    private List<Tile> _pathToPlayer;
+    private List<Tile> _pathToPlayer = new List<Tile>();
     private Tile _previousTile;
 
     [SerializeField] float _playerRadius = 10.0f;
@@ -30,7 +30,7 @@ public class EnemyMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
 
         _pathfinding = GetComponent<Pathfinding>();
-        _pathToPlayer = new List<Tile>();
+        //_pathToPlayer = new List<Tile>();
 
         _projectileSpawner = GetComponent<SpawnProjectiles>();
 
