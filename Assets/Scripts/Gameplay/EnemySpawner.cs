@@ -21,14 +21,18 @@ public class EnemySpawner : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        _spawnTimer += Time.deltaTime;
-
-        if (_spawnTimer >= _spawnDelay)
+        if (GameManager._currentGameState == GameManager.State.Playing)
         {
-            _spawnTimer = 0.0f;
+            _spawnTimer += Time.deltaTime;
 
-            SpawnEnemy();
+            if (_spawnTimer >= _spawnDelay)
+            {
+                _spawnTimer = 0.0f;
+
+                SpawnEnemy();
+            }
         }
+        
     }
 
     public void SpawnEnemy()

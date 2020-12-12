@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
             _currentGameState = State.WaveEnd;
 
             Debug.Log("Wave over");
-            DestroyEnemies();
+            //DestroyEnemies();
             UpdateScreen();
             //_waveNumber++;
             //MapGenerator.GenerateMap();
@@ -103,9 +103,10 @@ public class GameManager : MonoBehaviour
                 EnemyMovement movementScript = enemy.GetComponent<EnemyMovement>();
                 if (movementScript)
                 {
-                    Destroy(movementScript);
+                    //Destroy(movementScript);
+                    movementScript._isAlive = false;
                 }
-                Destroy(enemy);
+                //Destroy(enemy);
             }
         }
     }

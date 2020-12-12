@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     private Rigidbody _rb;
     public EnemyData _enemyData;
     public int _health;
+    public bool _isAlive = true;
 
     private Pathfinding _pathfinding;
     private List<Tile> _pathToPlayer = new List<Tile>();
@@ -41,13 +42,21 @@ public class EnemyMovement : MonoBehaviour
         _previousTile.coord.tileY = (int)transform.position.z;
 
         _spawnPosition = transform.position;
+
+        _isAlive = true;
     }
 
     private void Update()
     {
-        if (_health <= 0)
+        if (GameManager._currentGameState != GameManager.State.Playing || _health <= 0)
+        {
+            _isAlive = false;
+        }
+
+        if (!_isAlive)
         {
             //Enemy is dead
+            _isAlive = false;
             Destroy(gameObject);
             EnemySpawner._aliveEnemies--;
             Destroy(this);
@@ -57,70 +66,78 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.LookAt(_player.transform);
-
-        if (_player)
+        if (_isAlive)
         {
-            if (gameObject)
+            transform.LookAt(_player.transform);
+
+            if (_player)
             {
-                if (Vector3.Distance(_player.transform.position, transform.position) > _playerRadius)
+                if (gameObject)
                 {
-                    //Collider[] nearbyObjects = Physics.OverlapSphere(transform.position, _enemyRadius);
-
-                    //foreach (Collider c in nearbyObjects)
-                    //{
-                    //    if (c.gameObject.tag == "Enemy" && c.transform.position != transform.position)
-                    //    {
-                    //        _pathfinding._nodes[(int)c.transform.position.x, (int)c.transform.position.z].neighbourWalls += 100;
-                    //        _pathToPlayer.Clear();
-                    //        _pathToPlayer = _pathfinding.FindPath(transform.position, _player.transform.position);
-                    //    }
-                    //}
-                    //if (_collision == true)
-                    //{
-                    //    transform.position = Vector3.MoveTowards(transform.position, _spawnPosition / 10, _step / 1000);
-                    //    if (Vector3.Distance(transform.position, _spawnPosition / 10) < 0.001f)
-                    //    {
-                    //        _collision = false;
-                    //    }
-                    //}
-
-                    if (_pathToPlayer.Count == 0)
+                    if (Vector3.Distance(_player.transform.position, transform.position) > _playerRadius)
                     {
-                       // _pathToPlayer.Clear();
-                        _pathToPlayer = _pathfinding.FindPath(gameObject.transform.position, _player.transform.position);
-                    }
-                    else
-                    {
-                        //if (transform.position.x == _pathToPlayer[0].coord.tileX && transform.position.z == _pathToPlayer[0].coord.tileY)
+                        //Collider[] nearbyObjects = Physics.OverlapSphere(transform.position, _enemyRadius);
+
+                        //foreach (Collider c in nearbyObjects)
                         //{
-                        //    _pathToPlayer.Remove(_pathToPlayer[0]);
+                        //    if (c.gameObject.tag == "Enemy" && c.transform.position != transform.position)
+                        //    {
+                        //        _pathfinding._nodes[(int)c.transform.position.x, (int)c.transform.position.z].neighbourWalls += 100;
+                        //        _pathToPlayer.Clear();
+                        //        _pathToPlayer = _pathfinding.FindPath(transform.position, _player.transform.position);
+                        //    }
+                        //}
+                        //if (_collision == true)
+                        //{
+                        //    transform.position = Vector3.MoveTowards(transform.position, _spawnPosition / 10, _step / 1000);
+                        //    if (Vector3.Distance(transform.position, _spawnPosition / 10) < 0.001f)
+                        //    {
+                        //        _collision = false;
+                        //    }
                         //}
 
-                        //Vector3 direction = (new Vector3(_pathToPlayer[0].coord.tileX, 0.0f, _pathToPlayer[0].coord.tileY) - transform.position).normalized;
-                        //_rb.MovePosition(transform.position + direction * _enemyData._speed * Time.deltaTime);
-                        //transform.position = new Vector3(_pathToPlayer[0].coord.tileX, 0.0f, _pathToPlayer[0].coord.tileY);
+                        if (_pathToPlayer == null || _pathToPlayer.Count == 0)
+                        {
+                            // _pathToPlayer.Clear();
+                            _pathToPlayer = _pathfinding.FindPath(gameObject.transform.position, _player.transform.position);
+                        }
+                        else
+                        {
+                            //if (transform.position.x == _pathToPlayer[0].coord.tileX && transform.position.z == _pathToPlayer[0].coord.tileY)
+                            //{
+                            //    _pathToPlayer.Remove(_pathToPlayer[0]);
+                            //}
 
-                        _step = _enemyData._speed * Time.deltaTime;
-                        Vector3 target = new Vector3(_pathToPlayer[0].coord.tileX, 0.0f, _pathToPlayer[0].coord.tileY);
-                        MoveEnemy(target);
+                            //Vector3 direction = (new Vector3(_pathToPlayer[0].coord.tileX, 0.0f, _pathToPlayer[0].coord.tileY) - transform.position).normalized;
+                            //_rb.MovePosition(transform.position + direction * _enemyData._speed * Time.deltaTime);
+                            //transform.position = new Vector3(_pathToPlayer[0].coord.tileX, 0.0f, _pathToPlayer[0].coord.tileY);
+
+                            _step = _enemyData._speed * Time.deltaTime;
+                            Vector3 target = new Vector3(_pathToPlayer[0].coord.tileX, 0.0f, _pathToPlayer[0].coord.tileY);
+                            MoveEnemy(target);
+                        }
+
+
                     }
-
-
                 }
             }
         }
+        
         
     }
 
     private void LateUpdate()
     {
-        if (HasLineOfSight(gameObject, _player))
+        if (_isAlive)
         {
-            Color particleColour = new Color(Random.Range(0.890f, 0.921f), Random.Range(0.329f, 0.482f), Random.Range(0.020f, 0.188f), 1.0f);
-            _projectileSpawner.SpawnParticle(particleColour);
+            if (HasLineOfSight(gameObject, _player))
+            {
+                Color particleColour = new Color(Random.Range(0.890f, 0.921f), Random.Range(0.329f, 0.482f), Random.Range(0.020f, 0.188f), 1.0f);
+                _projectileSpawner.SpawnParticle(particleColour);
 
+            }
         }
+        
     }
 
     private bool HasLineOfSight(GameObject obj, GameObject target)
@@ -150,7 +167,7 @@ public class EnemyMovement : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //If an enemy collides with another enemy, move back to its spawn position
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Wall")
         {
             //_collision = true;
             //_pathToPlayer.Clear();

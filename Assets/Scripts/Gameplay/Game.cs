@@ -28,7 +28,7 @@ public class Game : MonoBehaviour
         _singleton = this;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if(_output.IsIdle)
         {
@@ -87,6 +87,7 @@ public class Game : MonoBehaviour
         BeatData data = _data.GetBeatById(id);
         StartCoroutine(DoDisplay(data));
         _currentBeat = data;
+        //Debug.Log(_output._state);
     }
 
     private IEnumerator DoDisplay(BeatData data)
