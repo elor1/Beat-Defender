@@ -101,6 +101,7 @@ public class StoryEditor : EditorWindow
         {
             _view = View.List;
             _currentIndex = -1;
+            GUI.FocusControl(null);
         }
     }
 

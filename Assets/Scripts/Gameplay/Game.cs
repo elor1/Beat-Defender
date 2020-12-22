@@ -5,7 +5,7 @@ public class Game : MonoBehaviour
 {
     [SerializeField] public StoryData _data;
 
-    private TextDisplay _output;
+    public TextDisplay _output;
     public static BeatData _currentBeat;
     private WaitForSeconds _wait;
 
@@ -28,7 +28,7 @@ public class Game : MonoBehaviour
         _singleton = this;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         if(_output.IsIdle)
         {
@@ -36,6 +36,10 @@ public class Game : MonoBehaviour
             {
                 DisplayBeat(1);
             }
+            //else if (_currentBeat.ID > 10)
+            //{
+            //    DisplayBeat(8);
+            //}
             else
             {
                 UpdateInput();
@@ -87,25 +91,31 @@ public class Game : MonoBehaviour
         BeatData data = _data.GetBeatById(id);
         StartCoroutine(DoDisplay(data));
         _currentBeat = data;
-        //Debug.Log(_output._state);
     }
 
     private IEnumerator DoDisplay(BeatData data)
     {
         _output.Clear();
 
-        while (_output.IsBusy)
+        if (GameManager._currentGameState == GameManager.State.Start)
         {
-            yield return null;
+            while (_output.IsBusy)
+            {
+                yield return null;
+            }
         }
+        
 
         _output.Display(data.DisplayText);
 
-        while(_output.IsBusy)
+        if (GameManager._currentGameState == GameManager.State.Start)
         {
-            yield return null;
+            while (_output.IsBusy)
+            {
+                yield return null;
+            }
         }
-        
+
         for (int count = 0; count < data.Decision.Count; ++count)
         {
             ChoiceData choice = data.Decision[count];

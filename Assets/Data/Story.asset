@@ -72,9 +72,37 @@ MonoBehaviour:
 
 '
     _id: 8
-  - _choices: []
-    _text: Next wave
+  - _choices:
+    - _text: Increase player speed
+      _beatId: 11
+    - _text: Increase projectile speed
+      _beatId: 12
+    _text: 'Wave completed!
+
+      Choose upgrade:
+
+'
     _id: 9
-  - _choices: []
-    _text: Next wave
+  - _choices:
+    - _text: Increase projectile damage
+      _beatId: 13
+    - _text: Increase player speed
+      _beatId: 14
+    _text: 'Wave completed!
+
+      Choose upgrade:
+
+'
     _id: 10
+  - _choices: []
+    _text: New Story Beat
+    _id: 11
+  - _choices: []
+    _text: New Story Beat
+    _id: 12
+  - _choices: []
+    _text: New Story Beat
+    _id: 13
+  - _choices: []
+    _text: New Story Beat
+    _id: 14

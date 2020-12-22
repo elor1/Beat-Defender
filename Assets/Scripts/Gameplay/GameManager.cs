@@ -128,6 +128,7 @@ public class GameManager : MonoBehaviour
         _screen.SetActive(true);
         //Game._singleton.DisplayBeat(8);
         //Game._currentBeat = Game._singleton._data.GetBeatById(8);
+        //Game._singleton.CancelInvoke();
         System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
         Game._singleton.DisplayBeat(_upgradeIDs[randomNumber.Next(0, _upgradeIDs.Length - 1)]);
         _timePlaying = 5000.0f;
@@ -158,6 +159,8 @@ public class GameManager : MonoBehaviour
 
                 MapGenerator.GenerateMap();
                 ChangeSong();
+                
+                Debug.Log("Cleared screen");
                 _screen.SetActive(false);
                 _currentGameState = State.Playing;
             }
