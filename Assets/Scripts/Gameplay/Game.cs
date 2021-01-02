@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Game : MonoBehaviour
 {
@@ -10,6 +11,21 @@ public class Game : MonoBehaviour
     private WaitForSeconds _wait;
 
     public static Game _singleton;
+
+    private string[] _upgrades = { "Increase projectile speed", "Increase player speed", "Increase projectile damage", "Increase rate of fire" };
+    //private Dictionary<string, GameManager.Upgrade> _upgradeChoiceIDs = new Dictionary<string, GameManager.Upgrade>()
+    //{
+    //    { "Increase projectile speed", GameManager.Upgrade.ProjectileSpeed },
+    //    { "Increase projectile damage", GameManager.Upgrade.ProjectileDamage },
+    //    { "Increase player speed", GameManager.Upgrade.MovementSpeed }
+    //};
+
+    private enum Upgrade
+    {
+        ProjectileSpeed,
+        MovementSpeed,
+        ProjectileDamage,
+    }
 
     //Beat ID for selected difficulties
     public enum Difficulty
@@ -68,20 +84,55 @@ public class Game : MonoBehaviour
             KeyCode alpha = KeyCode.Alpha1;
             KeyCode keypad = KeyCode.Keypad1;
 
-            for (int count = 0; count < _currentBeat.Decision.Count; ++count)
+            if (GameManager._currentGameState == GameManager.State.Start)
             {
-                if (alpha <= KeyCode.Alpha9 && keypad <= KeyCode.Keypad9)
+                for (int count = 0; count < _currentBeat.Decision.Count; ++count)
                 {
-                    if (Input.GetKeyDown(alpha) || Input.GetKeyDown(keypad))
+                    if (alpha <= KeyCode.Alpha9 && keypad <= KeyCode.Keypad9)
                     {
-                        ChoiceData choice = _currentBeat.Decision[count];
-                        DisplayBeat(choice.NextID);
-                        break;
+                        if (Input.GetKeyDown(alpha) || Input.GetKeyDown(keypad))
+                        {
+                            ChoiceData choice = _currentBeat.Decision[count];
+                            DisplayBeat(choice.NextID);
+                            break;
+                        }
                     }
-                }
 
-                ++alpha;
-                ++keypad;
+                    ++alpha;
+                    ++keypad;
+                }
+            }
+            else
+            {
+                for (int count = 0; count < _upgrades.Length; ++count)
+                {
+                    if (alpha <= KeyCode.Alpha9 && keypad <= KeyCode.Keypad9)
+                    {
+                        if (Input.GetKeyDown(alpha) || Input.GetKeyDown(keypad))
+                        {
+                            if (count == (int)Upgrade.ProjectileSpeed)
+                            {
+                                GameManager._projectileSpeed *= 1.2f;
+                                GameManager._choosingUpgrade = false;
+                                Debug.Log("ProjSpeed");
+                            }
+                            else if (count == (int)Upgrade.MovementSpeed)
+                            {
+                                GameManager._playerSpeed *= 1.1f;
+                                GameManager._choosingUpgrade = false;
+                                Debug.Log("PlayerSpeed");
+                            }
+                            else if (count == (int)Upgrade.ProjectileDamage)
+                            {
+                                GameManager._playerDamage *= 2;
+                                GameManager._choosingUpgrade = false;
+                                Debug.Log("ProjDamage");
+                            }
+                        }
+                    }
+                    ++alpha;
+                    ++keypad;
+                }
             }
         }
     }
@@ -97,14 +148,14 @@ public class Game : MonoBehaviour
     {
         _output.Clear();
 
-        if (GameManager._currentGameState == GameManager.State.Start)
+        //if (GameManager._currentGameState == GameManager.State.Start)
+        //{
+            
+        //}
+        while (_output.IsBusy)
         {
-            while (_output.IsBusy)
-            {
-                yield return null;
-            }
+            yield return null;
         }
-        
 
         _output.Display(data.DisplayText);
 
@@ -115,17 +166,40 @@ public class Game : MonoBehaviour
                 yield return null;
             }
         }
-
-        for (int count = 0; count < data.Decision.Count; ++count)
+        if (GameManager._currentGameState == GameManager.State.Start)
         {
-            ChoiceData choice = data.Decision[count];
-            _output.Display(string.Format("{0}: {1}", (count + 1), choice.DisplayText));
-
-            while (_output.IsBusy)
+            for (int count = 0; count < data.Decision.Count; ++count)
             {
-                yield return null;
+
+                ChoiceData choice = data.Decision[count];
+                _output.Display(string.Format("{0}: {1}", (count + 1), choice.DisplayText));
+
+                while (_output.IsBusy)
+                {
+                    yield return null;
+                }
             }
         }
+        else
+        {
+            for (int count = 0; count < _upgrades.Length + 1; ++count)
+            {
+                if (count == 0)
+                {
+                    _output.Display(" ");
+                }
+                else
+                {
+                    _output.Display(string.Format("{0}: {1}", count, _upgrades[count - 1]));
+                }
+                
+                while (_output.IsBusy)
+                {
+                    yield return null;
+                }
+            }
+        }
+        
 
         if(data.Decision.Count > 0)
         {

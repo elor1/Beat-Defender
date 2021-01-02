@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public static int _playerDamage = 1;
 
     private static int _waveNumber;
+    public static bool _choosingUpgrade;
 
     public static AudioSource _audioSource;
     [SerializeField] private AudioClip[] songs; //Songs to be added in inspector
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour
         //_currentGameState = State.Start;
         _playerHealth = 100;
         _waveNumber = 0;
+        _choosingUpgrade = false;
 
         _audioSource = GetComponent<AudioSource>();
         _audioSource.clip = songs[0];
@@ -73,9 +75,15 @@ public class GameManager : MonoBehaviour
             Debug.Log("GAME OVER");
         }
         
-        if (_currentGameState == State.WaveEnd)
+        if (_currentGameState == State.WaveEnd && !_choosingUpgrade)
         {
-            Upgrades();
+            //Upgrades();
+            MapGenerator.GenerateMap();
+            ChangeSong();
+
+            Debug.Log("Cleared screen");
+            _screen.SetActive(false);
+            _currentGameState = State.Playing;
         }
 
         if (_timePlaying <= 0.0f)
@@ -125,12 +133,14 @@ public class GameManager : MonoBehaviour
 
     private void UpdateScreen()
     {
+        _choosingUpgrade = true;
         _screen.SetActive(true);
         //Game._singleton.DisplayBeat(8);
         //Game._currentBeat = Game._singleton._data.GetBeatById(8);
         //Game._singleton.CancelInvoke();
-        System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
-        Game._singleton.DisplayBeat(_upgradeIDs[randomNumber.Next(0, _upgradeIDs.Length - 1)]);
+        //System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
+        //Game._singleton.DisplayBeat(_upgradeIDs[randomNumber.Next(0, _upgradeIDs.Length - 1)]);
+        Game._singleton.DisplayBeat(8);
         _timePlaying = 5000.0f;
     }
 
