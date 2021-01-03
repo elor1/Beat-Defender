@@ -124,6 +124,9 @@ public class MapGenerator : MonoBehaviour
 
     public static void GenerateMap()
     {
+        GameManager._waveNumber++;
+        Debug.Log(GameManager._waveNumber);
+
         FillMap();
 
         for (int i = 0; i < _smoothIterations; i++)

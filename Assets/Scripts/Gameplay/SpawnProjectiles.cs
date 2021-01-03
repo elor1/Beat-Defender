@@ -6,8 +6,6 @@ public class SpawnProjectiles : MonoBehaviour
 {
 
     public GameObject _firePoint;
-
-    public float _fireRate = 0.002f;
     private float _timePassed = 0.0f;
 
     [SerializeField] private GameObject particleToSpawn;
@@ -32,28 +30,29 @@ public class SpawnProjectiles : MonoBehaviour
     public void SpawnParticle(Color colour)
     {
         GameObject particle;
-        if (_firePoint != null && _timePassed >= _fireRate)
+        particle = Instantiate(particleToSpawn, _firePoint.transform.position, Quaternion.identity);
+        ParticleSystem particleSystem = particle.GetComponentInChildren<ParticleSystem>();
+        TrailRenderer trail = particle.GetComponentInChildren<TrailRenderer>();
+        if (particleSystem)
         {
-            particle = Instantiate(particleToSpawn, _firePoint.transform.position, Quaternion.identity);
-            ParticleSystem particleSystem = particle.GetComponentInChildren<ParticleSystem>();
-            TrailRenderer trail = particle.GetComponentInChildren<TrailRenderer>();
-            if (particleSystem)
-            {
-                //Debug.Log("COLOUR CHANGED");
-                var main = particleSystem.main;
-                main.startColor = colour;
-            }
-            if (trail)
-            {
-                trail.startColor = colour;
-                trail.endColor = new Color(colour.r, colour.g, colour.b, 0.0f);
-            }
-            particle.GetComponent<ProjectileMovement>()._owner = gameObject;
-            //RotateToMouse.GetMousePosition(particle);
-            particle.transform.forward = gameObject.transform.forward;
-
-            _timePassed = 0.0f;
+            //Debug.Log("COLOUR CHANGED");
+            var main = particleSystem.main;
+            main.startColor = colour;
         }
-        _timePassed += Time.deltaTime;
+        if (trail)
+        {
+            trail.startColor = colour;
+            trail.endColor = new Color(colour.r, colour.g, colour.b, 0.0f);
+        }
+        particle.GetComponent<ProjectileMovement>()._owner = gameObject;
+        //RotateToMouse.GetMousePosition(particle);
+        particle.transform.forward = gameObject.transform.forward;
+
+        _timePassed = 0.0f;
+        //if (_firePoint != null && _timePassed >= fireRate)
+        //{
+
+        //}
+        //_timePassed += Time.deltaTime;
     }
 }

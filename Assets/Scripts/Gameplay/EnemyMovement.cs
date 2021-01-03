@@ -9,6 +9,11 @@ public class EnemyMovement : MonoBehaviour
     private Rigidbody _rb;
     public EnemyData _enemyData;
     public int _health;
+    private int _healthMultiplier = 5;
+    public float _fireRate;
+    private float _fireRateMultiplier = 0.01f;
+    public int _damage;
+    private int _damageMultiplier = 2;
     public bool _isAlive = true;
 
     private Pathfinding _pathfinding;
@@ -21,6 +26,7 @@ public class EnemyMovement : MonoBehaviour
     private SpawnProjectiles _projectileSpawner;
 
     private float _step;
+    private float _timePassed;
 
     private Vector3 _spawnPosition;
     private bool _collision = false;
@@ -35,7 +41,19 @@ public class EnemyMovement : MonoBehaviour
 
         _projectileSpawner = GetComponent<SpawnProjectiles>();
 
-        _health = _enemyData._health;
+        if (GameManager._waveNumber > 1)
+        {
+            //Increase enemy stats with each wave
+            _health = _enemyData._health + (GameManager._waveNumber * _healthMultiplier);
+            _fireRate = _enemyData._fireRate - (GameManager._waveNumber * _fireRateMultiplier);
+            _damage = _enemyData._damage + (GameManager._waveNumber * _damageMultiplier);
+        }
+        else
+        {
+            _health = _enemyData._health;
+            _fireRate = _enemyData._fireRate;
+            _damage = _enemyData._damage;
+        }
 
         _previousTile = new Tile();
         _previousTile.coord.tileX = (int)transform.position.x;
@@ -61,6 +79,8 @@ public class EnemyMovement : MonoBehaviour
             EnemySpawner._aliveEnemies--;
             Destroy(this);
         }
+
+        _timePassed += Time.deltaTime;
     }
 
     // Update is called once per frame
@@ -133,8 +153,11 @@ public class EnemyMovement : MonoBehaviour
             if (HasLineOfSight(gameObject, _player))
             {
                 Color particleColour = new Color(Random.Range(0.890f, 0.921f), Random.Range(0.329f, 0.482f), Random.Range(0.020f, 0.188f), 1.0f);
-                _projectileSpawner.SpawnParticle(particleColour);
-
+                if (_timePassed >= _fireRate)
+                {
+                    _projectileSpawner.SpawnParticle(particleColour);
+                    _timePassed = 0.0f;
+                }
             }
         }
         

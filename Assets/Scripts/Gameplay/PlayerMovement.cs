@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody _rb; //Player's rigidbody component
     private SpawnProjectiles _projectileSpawner;
+    private float _timePassed;
 
     //public float _movementSpeed = 7000.0f; //Speed multiplier for player movement
 
@@ -14,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>(); //Get rigidbody component
         _projectileSpawner = GetComponent<SpawnProjectiles>();
-
+        _timePassed = 0.0f;
     }
 
     // Update is called once per frame
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
                 RotateToMouse.GetMousePosition(gameObject);
             }
         }
+        _timePassed += Time.deltaTime;
     }
 
     private void LateUpdate()
@@ -38,7 +40,12 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 Color particleColour = new Color(Random.Range(0.149f, 0.404f), Random.Range(0.906f, 0.945f), Random.Range(0.267f, 0.694f), 1.0f);
-                _projectileSpawner.SpawnParticle(particleColour);
+                if (_timePassed >= GameManager._playerFireRate)
+                {
+                    _projectileSpawner.SpawnParticle(particleColour);
+                    _timePassed = 0.0f;
+                }
+                
             }
         }
             

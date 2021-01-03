@@ -25,6 +25,7 @@ public class Game : MonoBehaviour
         ProjectileSpeed,
         MovementSpeed,
         ProjectileDamage,
+        RateOfFire,
     }
 
     //Beat ID for selected difficulties
@@ -127,6 +128,12 @@ public class Game : MonoBehaviour
                                 GameManager._playerDamage *= 2;
                                 GameManager._choosingUpgrade = false;
                                 Debug.Log("ProjDamage");
+                            }
+                            else if (count == (int)Upgrade.RateOfFire)
+                            {
+                                GameManager._playerFireRate -= 0.04f;
+                                GameManager._choosingUpgrade = false;
+                                Debug.Log("FireRate");
                             }
                         }
                     }

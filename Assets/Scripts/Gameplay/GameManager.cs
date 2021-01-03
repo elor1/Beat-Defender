@@ -26,9 +26,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _screen;
 
     public static int _playerHealth = 100;
-    public static int _playerDamage = 1;
+    public static int _playerDamage = 10;
+    public static float _playerFireRate = 0.2f;
 
-    private static int _waveNumber;
+    public static int _waveNumber;
     public static bool _choosingUpgrade;
 
     public static AudioSource _audioSource;
