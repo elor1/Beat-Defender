@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProjectileMovement : MonoBehaviour
 {
-    public float _speed = 30.0f;
+    public float _speed = GameManager._projectileSpeed;
     public GameObject _owner; //Who fired the projectile
     //public float fireRate;
     // Start is called before the first frame update
@@ -31,27 +31,26 @@ public class ProjectileMovement : MonoBehaviour
             DestroyProjectile();
         }
 
-        if (other.gameObject.tag == "Enemy" && _owner.tag == "Player")
-        {
-            //Decrease enemy health
-            EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
-            if (enemyMovement)
-            {
-                ProjectileDamage.DecreaseHealth(ref enemyMovement._health, GameManager._playerDamage);
-            }
-                
-            DestroyProjectile();
-        }
-
         if (other != null && _owner != null)
         {
-            if (other.gameObject.tag == "Player" && _owner.tag == "Enemy")
+            if (other.gameObject.tag == "Enemy" && _owner.tag == "Player")
+            {
+                //Decrease enemy health
+                EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
+                if (enemyMovement)
+                {
+                    ProjectileDamage.DecreaseHealth(ref enemyMovement._health, GameManager._playerDamage);
+                }
+                
+             DestroyProjectile();
+            }
+            else if (other.gameObject.tag == "Player" && _owner.tag == "Enemy")
             {
                 //Decrease player health
                 EnemyMovement enemyMovement = _owner.gameObject.GetComponent<EnemyMovement>();
                 if (enemyMovement)
                 {
-                    ProjectileDamage.DecreaseHealth(ref GameManager._playerHealth, enemyMovement._enemyData._damage);
+                    ProjectileDamage.DecreaseHealth(ref GameManager._playerHealth, enemyMovement._damage);
                 }
 
                 DestroyProjectile();

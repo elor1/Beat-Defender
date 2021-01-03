@@ -24,7 +24,7 @@ public class MapGenerator : MonoBehaviour
     }
 
 
-    [SerializeField] private int _wallPercent = 45; //Chance that a tile will be a wall
+    [SerializeField] private static int _wallPercent = 45; //Chance that a tile will be a wall
 
     public static int _width = 80; //Width of map
     public static int _height = 60; //Height of map
@@ -34,16 +34,16 @@ public class MapGenerator : MonoBehaviour
     public static Tile[,] _mapGrid;
     public static int _tileSize = 1; //Size of each tile in map
     public static int _borderSize = 7; //Number of wall blocks around each edge. Used so that the camera can't see over the edge of the world
-    [SerializeField] private int _smoothIterations = 20; //Number of times the SmootWalls method is called when generating a new map
+    [SerializeField] private static int _smoothIterations = 20; //Number of times the SmootWalls method is called when generating a new map
 
-    private int _wallThreshold; //Any wall regions with a smaller number of tiles than this will be removed from the map
-    private int _roomThreshold; //Any room regions with a smaller number of tiles than this will be removed from the map
-    [SerializeField] private int _pathRadius = 1; //The width of connections made between rooms
+    private static int _wallThreshold; //Any wall regions with a smaller number of tiles than this will be removed from the map
+    private static int _roomThreshold; //Any room regions with a smaller number of tiles than this will be removed from the map
+    [SerializeField] private static int _pathRadius = 1; //The width of connections made between rooms
 
     [SerializeField] private GameObject _wallPrefab; //Drag the prefab for the wall into this field in the inspector
     [SerializeField] private GameObject _playerPrefab; //Drag the prefab for the player into this field in the inspector
 
-    private GameObject _playerModel; //Stores the actual player object
+    private static GameObject _playerModel; //Stores the actual player object
 
     // Start is called before the first frame update
     private void Start()
@@ -122,8 +122,11 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private void GenerateMap()
+    public static void GenerateMap()
     {
+        GameManager._waveNumber++;
+        Debug.Log(GameManager._waveNumber);
+
         FillMap();
 
         for (int i = 0; i < _smoothIterations; i++)
@@ -141,7 +144,7 @@ public class MapGenerator : MonoBehaviour
     /// <summary>
     /// Generates random data for new map
     /// </summary>
-    private void FillMap()
+    private static void FillMap()
     {
         System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
 
@@ -179,7 +182,7 @@ public class MapGenerator : MonoBehaviour
     /// <param name="gridX">X coordinate in grid map</param>
     /// <param name="gridY">Y coordinate in grid map</param>
     /// <returns>Number of walls surrounding give tile</returns>
-    private int GetNumberOfSurroundingWalls(int gridX, int gridY)
+    private static int GetNumberOfSurroundingWalls(int gridX, int gridY)
     {
         int wallCount = 0;
         for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
@@ -200,7 +203,7 @@ public class MapGenerator : MonoBehaviour
     /// <summary>
     /// Uses cellular automata to create more room-like shapes
     /// </summary>
-    private void SmoothWalls()
+    private static void SmoothWalls()
     {
         for (int x = 0; x < _width; x++)
         {
@@ -230,7 +233,7 @@ public class MapGenerator : MonoBehaviour
     /// <param name="startX">Starting x coordinate of region</param>
     /// <param name="startY">Starting y coordinate of region</param>
     /// <returns>List of tiles in a region</returns>
-    private List<Coordinate> GetRegionTiles(int startX, int startY)
+    private static List<Coordinate> GetRegionTiles(int startX, int startY)
     {
         List<Coordinate> tiles = new List<Coordinate>();
         int[,] checkedTiles = new int[_width, _height];
@@ -269,7 +272,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     /// <param name="tileType">Type of tile: Wall or Room</param>
     /// <returns>List of regions</returns>
-    private List<List<Coordinate>> GetRegions(TileType tileType)
+    private static List<List<Coordinate>> GetRegions(TileType tileType)
     {
         List<List<Coordinate>> regions = new List<List<Coordinate>>();
         int[,] checkedTiles = new int[_width, _height];
@@ -298,7 +301,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     /// <param name="tileType">Type of tile: Wall or Room</param>
     /// <param name="threshold">Number of tiles in a region for it to not be removed</param>
-    private void RemoveSmallRegions(TileType tileType, int threshold)
+    private static void RemoveSmallRegions(TileType tileType, int threshold)
     {
         List<List<Coordinate>> regions = GetRegions(tileType);
         List<RoomData> survivingRooms = new List<RoomData>();
@@ -331,7 +334,7 @@ public class MapGenerator : MonoBehaviour
     /// Connects each room to the nearest other room
     /// </summary>
     /// <param name="rooms">List of surviving rooms</param>
-    private void connectClosestRooms(List<RoomData> rooms)
+    private static void connectClosestRooms(List<RoomData> rooms)
     {
         float minDistance = 0.0f;
         Coordinate bestTile1 = new Coordinate();
@@ -392,7 +395,7 @@ public class MapGenerator : MonoBehaviour
     /// <param name="room2">2nd room to be connected</param>
     /// <param name="tile1">1st room's tile to be connected</param>
     /// <param name="tile2">2nd room's tile to be connected</param>
-    private void CreateConnection(RoomData room1, RoomData room2, Coordinate tile1, Coordinate tile2)
+    private static void CreateConnection(RoomData room1, RoomData room2, Coordinate tile1, Coordinate tile2)
     {
         RoomData.ConnectRooms(room1, room2);
         Debug.DrawLine(CoordToWorldPoint(tile1), CoordToWorldPoint(tile2), Color.green, 15);
@@ -409,7 +412,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     /// <param name="center">Tile path should be cleared around</param>
     /// <param name="radius">Size of path to be cleared</param>
-    private void DrawCircle(Coordinate center, int radius)
+    private static void DrawCircle(Coordinate center, int radius)
     {
         for (int x = -radius; x <= radius; x++)
         {
@@ -435,7 +438,7 @@ public class MapGenerator : MonoBehaviour
     /// <param name="start">Starting coordinate of line</param>
     /// <param name="end">Ending coordinate of line</param>
     /// <returns>List coordinates in line</returns>
-    private List<Coordinate> GetConnectionLine(Coordinate start, Coordinate end)
+    private static List<Coordinate> GetConnectionLine(Coordinate start, Coordinate end)
     {
         List<Coordinate> line = new List<Coordinate>();
 
@@ -499,7 +502,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     /// <param name="tile">Cooridinates of tile to convert</param>
     /// <returns>Vector3 of position</returns>
-    private Vector3 CoordToWorldPoint(Coordinate tile)
+    private static Vector3 CoordToWorldPoint(Coordinate tile)
     {
         return new Vector3(tile.tileX * _tileSize, 1.0f, tile.tileY * _tileSize);
     }
@@ -507,7 +510,7 @@ public class MapGenerator : MonoBehaviour
     /// <summary>
     /// Sets each wall game object to active or unactive depending on whether it should be visible or not
     /// </summary>
-    private void HideWalls()
+    private static void HideWalls()
     {
         for (int x = 0; x < _width; x++)
         {
@@ -528,7 +531,7 @@ public class MapGenerator : MonoBehaviour
     /// <summary>
     /// Moves player to a random spawn point
     /// </summary>
-    private void SpawnPlayer()
+    private static void SpawnPlayer()
     {
         Coordinate spawnPoint = GetRandomRoomTile();
 

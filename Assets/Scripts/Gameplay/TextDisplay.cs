@@ -21,7 +21,8 @@ public class TextDisplay : MonoBehaviour
         _shortWait = new WaitForSeconds(0.1f);
         _longWait = new WaitForSeconds(0.8f);
 
-        _displayText.text = string.Empty;
+        _displayString = string.Empty;
+        _displayText.text = _displayString;
         _state = State.Idle;
     }
 

@@ -59,5 +59,50 @@ MonoBehaviour:
     _text: LAUNCHING MEDIUM DIFFICULTY
     _id: 6
   - _choices: []
-    _text: LAUNCHING HARD DIFICULTY
+    _text: LAUNCHING HARD DIFFICULTY
     _id: 7
+  - _choices:
+    - _text: Increase projectile speed
+      _beatId: 9
+    - _text: Increase projectile damage
+      _beatId: 10
+    _text: 'Wave completed!
+
+      Choose upgrade:
+
+'
+    _id: 8
+  - _choices:
+    - _text: Increase player speed
+      _beatId: 11
+    - _text: Increase projectile speed
+      _beatId: 12
+    _text: 'Wave completed!
+
+      Choose upgrade:
+
+'
+    _id: 9
+  - _choices:
+    - _text: Increase projectile damage
+      _beatId: 13
+    - _text: Increase player speed
+      _beatId: 14
+    _text: 'Wave completed!
+
+      Choose upgrade:
+
+'
+    _id: 10
+  - _choices: []
+    _text: New Story Beat
+    _id: 11
+  - _choices: []
+    _text: New Story Beat
+    _id: 12
+  - _choices: []
+    _text: New Story Beat
+    _id: 13
+  - _choices: []
+    _text: New Story Beat
+    _id: 14
