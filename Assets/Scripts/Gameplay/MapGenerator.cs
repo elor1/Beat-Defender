@@ -145,6 +145,7 @@ public class MapGenerator : MonoBehaviour
         //gameManager.currentState = GameManager.GameState.Playing;
 
         ScaleCubes.ResetScales();
+        AudioAnalyser.ResetAmplitude();
     }
 
     /// <summary>

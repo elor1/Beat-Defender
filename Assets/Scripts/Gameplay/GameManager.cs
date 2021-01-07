@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject _screen;
 
+    public static int _playerStartingHealth = 100;
     public static int _playerHealth = 100;
     public static int _playerDamage = 10;
     public static float _playerFireRate = 0.2f;
@@ -85,6 +86,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Cleared screen");
             _screen.SetActive(false);
             _currentGameState = State.Playing;
+            _playerHealth = _playerStartingHealth;
         }
 
         if (_timePlaying <= 0.0f)

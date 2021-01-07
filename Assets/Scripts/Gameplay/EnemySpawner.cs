@@ -6,21 +6,39 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private EnemyData[] enemyTypes; //Add enemy scriptable objects in inspector
 
-    public float _spawnDelay = 5.0f; //Time between each enemy is spawned
+    private const float SPAWN_DELAY_MULTIPLIER = 0.5f;
+    private const float MIN_SPAWN_DELAY = 1.0f;
+    private const float MAX_SPAWN_DELAY = 7.0f;
+    private const int INITIAL_MAX_ENEMIES = 10;
+    private const int MAX_ENEMIES_MULTIPLIER = 5;
+    private const float WAVE_SPAWN_DELAY_MULTIPLIER = 0.25f;
+
+    private float _spawnDelay; //Time between each enemy is spawned
     private float _spawnTimer = 0.0f;
-    public int _maxEnemies = 20; //Maximum number of enemies to be alive at one time
+    public int _maxEnemies = 10; //Maximum number of enemies to be alive at one time
     public static int _aliveEnemies = 0; //Current number of enemies alive
     [SerializeField] private float _playerRadius = 35.0f; //Radius around player where enemies can't spawn
 
     // Start is called before the first frame update
     private void Start()
     {
-        
+        _spawnDelay = 3.0f;
     }
 
     // Update is called once per frame
     private void Update()
     {
+        //The higher the average amplitude, the faster enemies spawn
+        _spawnDelay = Mathf.Clamp(SPAWN_DELAY_MULTIPLIER / AudioAnalyser._averageAmplitude, MIN_SPAWN_DELAY, MAX_SPAWN_DELAY);
+
+        //The higher the wave number, enemies spawn faster and max number of enemies increases
+        if (GameManager._waveNumber > 1)
+        {
+            _maxEnemies = INITIAL_MAX_ENEMIES + (GameManager._waveNumber * MAX_ENEMIES_MULTIPLIER);
+            _spawnDelay = Mathf.Clamp(_spawnDelay - (GameManager._waveNumber * WAVE_SPAWN_DELAY_MULTIPLIER), MIN_SPAWN_DELAY, MAX_SPAWN_DELAY);
+        }
+
+        //Debug.Log(_spawnDelay);
         if (GameManager._currentGameState == GameManager.State.Playing)
         {
             _spawnTimer += Time.deltaTime;

@@ -345,9 +345,9 @@ public class AudioAnalyser : MonoBehaviour
     private float[] _samples;
     private float[] _spectrum;
 
-    private float _averageAmplitude = 0.0f;
-    private float _currentAmplitude = 0;
-    private int _amplitudeCount = 0;
+    public static float _averageAmplitude = 0.0f;
+    public static float _currentAmplitude = 0;
+    private static int _amplitudeCount = 0;
 
     private void Start()
     {
@@ -385,5 +385,13 @@ public class AudioAnalyser : MonoBehaviour
 
         _averageAmplitude += (total - _averageAmplitude) / _amplitudeCount;
         _currentAmplitude = total;
+        Debug.Log(_currentAmplitude);
+    }
+
+    public static void ResetAmplitude()
+    {
+        _averageAmplitude = 0.0f;
+        _currentAmplitude = 0.0f;
+        _amplitudeCount = 0;
     }
 }
