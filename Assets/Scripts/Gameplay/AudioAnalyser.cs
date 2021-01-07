@@ -95,12 +95,13 @@ public class AudioAnalyser : MonoBehaviour
         //}
     }*/
 
-    private AudioSource _audioSource;
-    private int _numSamples = 512;
+    /*private AudioSource _audioSource;
+    private int _numSamples = 1024;
     private int _numFrequencyBands = 16;
     [SerializeField] private float _sampleMultipler = 10.0f;
 
     private float[] _samples;
+    private float[] _spectrum;
     private float[] _frequencyBands;
     private float[] _frequencyBandBuffer;
     private float[] _bufferDecrease;
@@ -112,10 +113,32 @@ public class AudioAnalyser : MonoBehaviour
     private float[] _audioBand;
     private float[] _audioBandBuffer;
 
+    //[SerializeField] private int _lowBandIndex = 1;
+    //[SerializeField] private int _highBandIndex = 9;
+    //private int _lowIndexCount = 0;
+    //private int _highIndexCount = 0;
+    //private int _tempLowIndexCount = 0;
+    //private int _tempHighIndexCount = 0;
+    //private int[] _tempCount = new int[16];
+    //private int[] _count = new int[16];
+
+    //private float _intensityMultiplier = 100.0f;
+    //public static float _intensity = 0;
+    //private float _intensityLerpDuration = 5.0f;
+
+    private float _averageAmplitude;
+    private float _currentAmplitude;
+
+    [SerializeField] private float _beatThreshold = 0.6f;
+
+    private float _beatCountFrequency = 0.2f; //Time between each beat count is done
+    private float _timer;
+
     private void Start()
     {
         _audioSource = GameManager._audioSource;
         _samples = new float[_numSamples];
+        _spectrum = new float[_numSamples];
         _frequencyBands = new float[_numFrequencyBands];
         _frequencyBandBuffer = new float[_numFrequencyBands];
         _bufferDecrease = new float[_numFrequencyBands];
@@ -123,20 +146,81 @@ public class AudioAnalyser : MonoBehaviour
         _maxFrequency = new float[_numFrequencyBands];
         _audioBand = new float[_numFrequencyBands];
         _audioBandBuffer = new float[_numFrequencyBands];
+
+        _timer = _beatCountFrequency;
+
+        //StartCoroutine(LerpIntensity());
     }
 
     private void Update()
     {
+        _timer -= Time.deltaTime;
+
         GetSpecrumData();
         CreateFrequencyBands();
         SetBandBuffer();
         CreateAudioBands();
+        GetAmplitude();
+        //CalculateBeatsPerSecond(_lowBandIndex, ref _lowIndexCount);
+        //CalculateBeatsPerSecond(_highBandIndex, ref _highIndexCount);
+        //if (IsBeat(_lowBandIndex))
+        //{
+        //    _tempLowIndexCount++;
+        //}
+
+        //if (IsBeat(_highBandIndex))
+        //{
+        //    _tempHighIndexCount++;
+        //}
+
+    //    for (int i = 0; i < _numFrequencyBands; i++)
+    //    {
+    //        if (IsBeat(i))
+    //        {
+    //            _tempCount[i]++;
+    //        }
+    //    }
+
+    //    if (_timer <= 0.0f)
+    //    {
+    //        //_lowIndexCount = _tempLowIndexCount;
+    //        //_highIndexCount = _tempHighIndexCount;
+    //        //_tempLowIndexCount = 0;
+    //        //_tempHighIndexCount = 0;
+
+    //        //float endValue = (_lowIndexCount + _highIndexCount) * _intensityMultiplier;
+
+    //        float endValue = 0;
+    //        for (int i = 0; i < _numFrequencyBands; i++)
+    //        {
+    //            _count[i] = _tempCount[i];
+    //            _tempCount[i] = 0;
+
+    //            endValue += _count[i];
+    //        }
+
+    //        if ( _intensity > endValue)
+    //        {
+    //            _intensity = Mathf.Lerp(_intensity, endValue, 0.25f);
+    //        }
+    //        else
+    //        {
+    //            _intensity = 1 / Mathf.Lerp(_intensity, endValue, 0.75f);
+    //        }
+
+    //        _intensity *= _intensityMultiplier;
+
+    //        _timer = _beatCountFrequency;
+    //        Debug.Log(_intensity);
+    //    }
+
+
     }
 
     private void GetSpecrumData()
     {
-        //_audioSource.GetOutputData(outputData, 0);
-        _audioSource.GetSpectrumData(_samples, 0, FFTWindow.Blackman);
+        _audioSource.GetOutputData(_samples, 0);
+        _audioSource.GetSpectrumData(_spectrum, 0, FFTWindow.Blackman);
     }
 
     private void CreateFrequencyBands()
@@ -172,7 +256,7 @@ public class AudioAnalyser : MonoBehaviour
 
             for (int j = band; j < sampleCount; j++)
             {
-                average += _samples[band] * (band + 1);
+                average += _spectrum[band] * (band + 1);
                 band++;
             }
 
@@ -182,7 +266,7 @@ public class AudioAnalyser : MonoBehaviour
     }
 
     /// <summary>
-    /// Makes frequency bands have a value between 0 and 1
+    /// Divides all frequency values by max frequency so that frequency bands have a value between 0 and 1
     /// </summary>
     private void CreateAudioBands()
     {
@@ -212,5 +296,94 @@ public class AudioAnalyser : MonoBehaviour
                 _bufferDecrease[i] *= _bufferMultiplier;
             }
         }
+    }
+
+    private bool IsBeat(int index)
+    {
+        if (_audioBandBuffer[index] >= _beatThreshold)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void GetAmplitude()
+    {
+        float amplitude = 0.0f;
+        for (int i = 0; i < _numSamples; i++)
+        {
+            amplitude = _samples[i] * _samples[i];
+        }
+        _averageAmplitude = Mathf.Sqrt(amplitude / _numSamples);
+        _currentAmplitude = 20 * Mathf.Log10(_currentAmplitude / 0.1f);
+    }
+
+    //private IEnumerator LerpIntensity()
+    //{
+    //    float timePassed = 0.0f;
+
+    //    while (timePassed < _intensityLerpDuration)
+    //    {
+    //        float endValue = (_lowIndexCount + _highIndexCount) * _intensityMultiplier;
+    //        _intensity = Mathf.Lerp(_intensity, endValue, 0.5f);
+
+    //        timePassed += Time.deltaTime;
+
+    //        yield return null;
+    //    }
+
+    //   // _intensity = (_lowIndexCount + _highIndexCount) * _intensityMultiplier;
+    //}*/
+
+    private AudioSource _audioSource;
+
+    private const int NUM_SAMPLES = 1024;
+    [SerializeField] private const float BEAT_THRESHOLD = 0.15f;
+    private const float AMPLITUDE_MULTIPLIER = 0.1f;
+
+    private float[] _samples;
+    private float[] _spectrum;
+
+    private float _averageAmplitude = 0.0f;
+    private float _currentAmplitude = 0;
+    private int _amplitudeCount = 0;
+
+    private void Start()
+    {
+        _audioSource = GetComponent<AudioSource>();
+        _samples = new float[NUM_SAMPLES];
+        _spectrum = new float[NUM_SAMPLES];
+    }
+
+    private void Update()
+    {
+        GetAudioData();
+        CalculateAmplitude();
+  
+        if (_currentAmplitude > _averageAmplitude && (_currentAmplitude - _averageAmplitude) > BEAT_THRESHOLD)
+        {
+            //BEAT
+            ScaleCubes.RaiseWalls();
+        }
+    }
+
+    private void GetAudioData()
+    {
+        _audioSource.GetOutputData(_samples, 0);
+        _audioSource.GetSpectrumData(_spectrum, 0, FFTWindow.BlackmanHarris);
+    }
+
+    private void CalculateAmplitude()
+    {
+        _amplitudeCount++;
+        float total = 0.0f;
+        foreach (float sample in _spectrum)
+        {
+            total += sample;
+        }
+
+        _averageAmplitude += (total - _averageAmplitude) / _amplitudeCount;
+        _currentAmplitude = total;
     }
 }

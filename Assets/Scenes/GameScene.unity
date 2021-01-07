@@ -402,9 +402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9e8662ca064664409853257156f9afe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sampleMultipler: 10
-  _buffer: 0.005
-  _bufferMultiplier: 1.2
 --- !u!1 &1274702675
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,6 +698,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1855098388}
   - component: {fileID: 1855098387}
+  - component: {fileID: 1855098389}
   m_Layer: 0
   m_Name: Map Generator
   m_TagString: Untagged
@@ -736,6 +734,18 @@ Transform:
   m_Father: {fileID: 1883225051}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1855098389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855098386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1ee339c54d48e149b2bdae2221bfd04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1883225050
 GameObject:
   m_ObjectHideFlags: 0
