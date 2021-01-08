@@ -390,7 +390,7 @@ public class AudioAnalyser : MonoBehaviour
 
         _averageAmplitude += (total - _averageAmplitude) / _amplitudeCount;
         _currentAmplitude = total;
-        Debug.Log(_currentAmplitude);
+        //Debug.Log(_currentAmplitude);
     }
 
     public static void ResetAmplitude()
