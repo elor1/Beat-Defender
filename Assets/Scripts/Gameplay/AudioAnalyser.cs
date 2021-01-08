@@ -341,6 +341,7 @@ public class AudioAnalyser : MonoBehaviour
     private const int NUM_SAMPLES = 1024;
     [SerializeField] private const float BEAT_THRESHOLD = 0.15f;
     private const float AMPLITUDE_MULTIPLIER = 0.1f;
+    private const int SAMPLE_RATE = 44100;
 
     private float[] _samples;
     private float[] _spectrum;
@@ -348,6 +349,8 @@ public class AudioAnalyser : MonoBehaviour
     public static float _averageAmplitude = 0.0f;
     public static float _currentAmplitude = 0;
     private static int _amplitudeCount = 0;
+
+    public static float _loudestFrequency;
 
     private void Start()
     {
@@ -366,6 +369,8 @@ public class AudioAnalyser : MonoBehaviour
             //BEAT
             ScaleCubes.RaiseWalls();
         }
+
+        _loudestFrequency = FindLoudestFrequency();
     }
 
     private void GetAudioData()
@@ -393,5 +398,18 @@ public class AudioAnalyser : MonoBehaviour
         _averageAmplitude = 0.0f;
         _currentAmplitude = 0.0f;
         _amplitudeCount = 0;
+    }
+
+    private int FindLoudestFrequency()
+    {
+        int maxIndex = 0;
+        for (int i = 0; i < NUM_SAMPLES; i++)
+        {
+            if (_spectrum[i] > _spectrum[maxIndex])
+            {
+                maxIndex = i;
+            }
+        }
+        return maxIndex / 128;
     }
 }
