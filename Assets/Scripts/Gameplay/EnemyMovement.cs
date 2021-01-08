@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    private const float FREQUENCY_MULTIPLIER = 0.00125f;
+    private const int HEALTH_MULTIPLIER = 5;
+    private const float FIRE_RATE_MULTIPLIER = 0.01f;
+    private const int DAMAGE_MULTIPLIER = 2;
+
     private GameObject _player;
 
     private Rigidbody _rb;
     public EnemyData _enemyData;
+
     public int _health;
-    private int _healthMultiplier = 5;
     public float _fireRate;
-    private float _fireRateMultiplier = 0.01f;
     public int _damage;
-    private int _damageMultiplier = 2;
     public bool _isAlive = true;
 
     private Pathfinding _pathfinding;
@@ -44,9 +47,9 @@ public class EnemyMovement : MonoBehaviour
         if (GameManager._waveNumber > 1)
         {
             //Increase enemy stats with each wave
-            _health = _enemyData._health + (GameManager._waveNumber * _healthMultiplier);
-            _fireRate = _enemyData._fireRate - (GameManager._waveNumber * _fireRateMultiplier);
-            _damage = _enemyData._damage + (GameManager._waveNumber * _damageMultiplier);
+            _health = _enemyData._health + (GameManager._waveNumber * HEALTH_MULTIPLIER);
+            _fireRate = _enemyData._fireRate - (GameManager._waveNumber * FIRE_RATE_MULTIPLIER);
+            _damage = _enemyData._damage + (GameManager._waveNumber * DAMAGE_MULTIPLIER);
         }
         else
         {
@@ -54,6 +57,8 @@ public class EnemyMovement : MonoBehaviour
             _fireRate = _enemyData._fireRate;
             _damage = _enemyData._damage;
         }
+
+        _fireRate -= AudioAnalyser._loudestFrequency * FREQUENCY_MULTIPLIER;
 
         _previousTile = new Tile();
         _previousTile.coord.tileX = (int)transform.position.x;

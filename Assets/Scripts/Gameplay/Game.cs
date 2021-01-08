@@ -12,7 +12,7 @@ public class Game : MonoBehaviour
 
     public static Game _singleton;
 
-    private string[] _upgrades = { "Increase projectile speed", "Increase player speed", "Increase projectile damage", "Increase rate of fire" };
+    private string[] _upgrades = { "Increase projectile speed", "Increase player speed", "Increase projectile damage", "Increase rate of fire", "Increase player health" };
     //private Dictionary<string, GameManager.Upgrade> _upgradeChoiceIDs = new Dictionary<string, GameManager.Upgrade>()
     //{
     //    { "Increase projectile speed", GameManager.Upgrade.ProjectileSpeed },
@@ -26,6 +26,7 @@ public class Game : MonoBehaviour
         MovementSpeed,
         ProjectileDamage,
         RateOfFire,
+        PlayerHealth,
     }
 
     //Beat ID for selected difficulties
@@ -134,6 +135,12 @@ public class Game : MonoBehaviour
                                 GameManager._playerFireRate -= 0.04f;
                                 GameManager._choosingUpgrade = false;
                                 Debug.Log("FireRate");
+                            }
+                            else if (count == (int)Upgrade.PlayerHealth)
+                            {
+                                GameManager._playerStartingHealth += (int)(GameManager._playerStartingHealth * 0.2f);
+                                GameManager._choosingUpgrade = false;
+                                Debug.Log("PlayerHealth");
                             }
                         }
                     }

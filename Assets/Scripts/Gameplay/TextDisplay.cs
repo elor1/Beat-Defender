@@ -18,12 +18,24 @@ public class TextDisplay : MonoBehaviour
     private void Awake()
     {
         _displayText = GetComponent<TMP_Text>();
-        _shortWait = new WaitForSeconds(0.1f);
+        _shortWait = new WaitForSeconds(0.03f);
         _longWait = new WaitForSeconds(0.8f);
 
         _displayString = string.Empty;
         _displayText.text = _displayString;
         _state = State.Idle;
+    }
+
+    private void Update()
+    {
+        if (GameManager._currentGameState == GameManager.State.WaveEnd)
+        {
+            _shortWait = new WaitForSeconds(0.01f);
+        }
+        else
+        {
+            _shortWait = new WaitForSeconds(0.03f);
+        }
     }
 
     private IEnumerator DoShowText(string text)

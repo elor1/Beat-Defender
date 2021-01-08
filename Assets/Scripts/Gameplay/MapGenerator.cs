@@ -45,13 +45,17 @@ public class MapGenerator : MonoBehaviour
 
     private static GameObject _playerModel; //Stores the actual player object
 
+    private void Awake()
+    {
+        _width += _borderSize * 2;
+        _height += _borderSize * 2;
+    }
+
     // Start is called before the first frame update
     private void Start()
     {
         _wallThreshold = (_width * _height) / 100;
         _roomThreshold = (_width * _height) / 150;
-        _width += _borderSize * 2;
-        _height += _borderSize * 2;
         //_mapGrid = new TileType[_width, _height];
         _mapGrid = new Tile[_width, _height];
         for (int x = 0; x < _width; x++)
@@ -139,6 +143,9 @@ public class MapGenerator : MonoBehaviour
         HideWalls();
         SpawnPlayer();
         //gameManager.currentState = GameManager.GameState.Playing;
+
+        ScaleCubes.ResetScales();
+        AudioAnalyser.ResetAmplitude();
     }
 
     /// <summary>
