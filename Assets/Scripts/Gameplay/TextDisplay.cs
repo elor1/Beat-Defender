@@ -116,9 +116,18 @@ public class TextDisplay : MonoBehaviour
     {
         if (_state == State.Idle)
         {
-            StopAllCoroutines();
-            _state = State.Busy;
-            StartCoroutine(DoClearText());
+            if (GameManager._currentGameState == GameManager.State.Start)
+            {
+                StopAllCoroutines();
+                _state = State.Busy;
+                StartCoroutine(DoClearText());
+            }
+            else
+            {
+                _displayString = string.Empty;
+                _displayText.text = _displayString;
+                _state = State.Idle;
+            }
         }
     }
 }

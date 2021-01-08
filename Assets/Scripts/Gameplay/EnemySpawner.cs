@@ -5,6 +5,11 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private EnemyData[] enemyTypes; //Add enemy scriptable objects in inspector
+    private enum Enemy
+    {
+        Basic,
+        Strong
+    }
 
     private const float SPAWN_DELAY_MULTIPLIER = 0.5f;
     private const float MIN_SPAWN_DELAY = 1.0f;
@@ -12,6 +17,7 @@ public class EnemySpawner : MonoBehaviour
     private const int INITIAL_MAX_ENEMIES = 10;
     private const int MAX_ENEMIES_MULTIPLIER = 5;
     private const float WAVE_SPAWN_DELAY_MULTIPLIER = 0.25f;
+    private const int STRONG_ENEMY_CHANCE = 20;
 
     private float _spawnDelay; //Time between each enemy is spawned
     private float _spawnTimer = 0.0f;
@@ -81,7 +87,16 @@ public class EnemySpawner : MonoBehaviour
                 }
             }
             //Debug.Log(MapGenerator._mapGrid[spawnPoint.tileX, spawnPoint.tileY]);
-            Instantiate(enemyTypes[randomNumber.Next(0, enemyTypes.Length - 1)]._prefab, new Vector3(spawnPoint.tileX * MapGenerator._tileSize, 0.0f, spawnPoint.tileY * MapGenerator._tileSize), Quaternion.identity);
+            int index;
+            if (Random.Range(0, 100) < STRONG_ENEMY_CHANCE)
+            {
+                index = (int)Enemy.Strong;
+            }
+            else
+            {
+                index = (int)Enemy.Basic;
+            }
+            Instantiate(enemyTypes[index]._prefab, new Vector3(spawnPoint.tileX * MapGenerator._tileSize, 0.0f, spawnPoint.tileY * MapGenerator._tileSize), Quaternion.identity);
             _aliveEnemies++;
         }
     }
