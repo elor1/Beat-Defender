@@ -140,6 +140,7 @@ public class Game : MonoBehaviour
                             {
                                 GameManager._playerStartingHealth += (int)(GameManager._playerStartingHealth * 0.2f);
                                 GameManager._choosingUpgrade = false;
+                                HealthBar._healthSlider.maxValue = GameManager._playerStartingHealth;
                                 Debug.Log("PlayerHealth");
                             }
                         }
