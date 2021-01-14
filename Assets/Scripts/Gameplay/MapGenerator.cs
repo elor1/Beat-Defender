@@ -129,7 +129,7 @@ public class MapGenerator : MonoBehaviour
     public static void GenerateMap()
     {
         GameManager._waveNumber++;
-        Debug.Log(GameManager._waveNumber);
+        UpdateHUD.UpdateWaveNumber();
 
         FillMap();
 

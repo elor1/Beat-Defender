@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
     public static float _playerSpeed = 7000.0f;
     public static float _projectileSpeed = 30.0f;
 
+    private int _upgradeBeatID = 4;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -73,7 +75,9 @@ public class GameManager : MonoBehaviour
         if (_playerHealth <= 0)
         {
             //Player is dead. Game over.
-            //_currentGameState = State.Over;
+            _currentGameState = State.Over;
+            _audioSource.Stop();
+            SceneManager.SwitchScene("EndScene");
             Debug.Log("GAME OVER");
         }
         
@@ -143,7 +147,7 @@ public class GameManager : MonoBehaviour
         //Game._singleton.CancelInvoke();
         //System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
         //Game._singleton.DisplayBeat(_upgradeIDs[randomNumber.Next(0, _upgradeIDs.Length - 1)]);
-        Game._singleton.DisplayBeat(8);
+        Game._singleton.DisplayBeat(_upgradeBeatID);
         _timePlaying = 5000.0f;
     }
 

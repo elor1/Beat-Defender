@@ -14,95 +14,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _beats:
   - _choices:
-    - _text: What's happened?
+    - _text: 'PLAY GAME
+
+'
       _beatId: 2
-    _text: 'Hey...
+    - _text: 'HOW TO PLAY
 
-      Hey you!
+'
+      _beatId: 3
+    _text: 'DEFENDER
 
-      I need your help!
 
 '
     _id: 1
-  - _choices:
-    - _text: Yes
-      _beatId: 3
-    - _text: No (return to menu)
-      _beatId: 4
-    _text: 'I''ve been trapped inside here and I need you to help me break free!
-
-      Can
-      you help?
-
-'
+  - _choices: []
+    _text: LAUNCHING DEFENDER...
     _id: 2
-  - _choices:
-    - _text: Novice
-      _beatId: 5
-    - _text: Intermediate
-      _beatId: 6
-    - _text: Expert
-      _beatId: 7
-    _text: 'Thanks!
+  - _choices: []
+    _text: 'HOW TO PLAY:
 
-      What is your level of expertise?
 
-'
+      WASD to move
+
+      Left click to shoot
+
+
+      Round
+      enemies shoot and move quicker
+
+      Square enemies are stronger and do more
+      damage
+
+
+      Attempt to survive multiple waves by killing enemies
+
+      Enemy
+      stats increase based on the music and number of waves survived
+
+      Each
+      wave lasts the length of a song
+
+
+      Press ESC to return to menu'
     _id: 3
   - _choices: []
-    _text: RETURN TO MENU
+    _text: 'Wave Complete!
+
+
+      Choose upgrade:
+
+'
     _id: 4
-  - _choices: []
-    _text: LAUNCHING EASY DIFFICULTY
-    _id: 5
-  - _choices: []
-    _text: LAUNCHING MEDIUM DIFFICULTY
-    _id: 6
-  - _choices: []
-    _text: LAUNCHING HARD DIFFICULTY
-    _id: 7
-  - _choices:
-    - _text: Increase projectile speed
-      _beatId: 9
-    - _text: Increase projectile damage
-      _beatId: 10
-    _text: 'Wave completed!
-
-      Choose upgrade:
-
-'
-    _id: 8
-  - _choices:
-    - _text: Increase player speed
-      _beatId: 11
-    - _text: Increase projectile speed
-      _beatId: 12
-    _text: 'Wave completed!
-
-      Choose upgrade:
-
-'
-    _id: 9
-  - _choices:
-    - _text: Increase projectile damage
-      _beatId: 13
-    - _text: Increase player speed
-      _beatId: 14
-    _text: 'Wave completed!
-
-      Choose upgrade:
-
-'
-    _id: 10
-  - _choices: []
-    _text: New Story Beat
-    _id: 11
-  - _choices: []
-    _text: New Story Beat
-    _id: 12
-  - _choices: []
-    _text: New Story Beat
-    _id: 13
-  - _choices: []
-    _text: New Story Beat
-    _id: 14
