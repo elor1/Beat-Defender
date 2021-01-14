@@ -22,7 +22,7 @@ public class CameraMovement : MonoBehaviour
         if (Game._currentBeat != null)
         {
             //When player selects a difficulty, zoom camera and start game
-            if (Game._currentBeat.ID == (int)Game.Difficulty.Easy || Game._currentBeat.ID == (int)Game.Difficulty.Medium || Game._currentBeat.ID == (int)Game.Difficulty.Hard)
+            if (Game._currentBeat.ID == 2)
             {
                 ZoomCamera();
             }
