@@ -36,6 +36,19 @@ public class TextDisplay : MonoBehaviour
         {
             _shortWait = new WaitForSeconds(0.03f);
         }
+
+        if (Game._currentBeat != null)
+        {
+            if (Game._currentBeat.ID <= 2)
+            {
+                _displayText.fontSize = 150;
+            }
+            else
+            {
+                _displayText.fontSize = 86;
+            }
+        }
+        
     }
 
     private IEnumerator DoShowText(string text)
@@ -130,4 +143,5 @@ public class TextDisplay : MonoBehaviour
             }
         }
     }
+
 }

@@ -18,17 +18,18 @@ public class EnemySpawner : MonoBehaviour
     private const int MAX_ENEMIES_MULTIPLIER = 5;
     private const float WAVE_SPAWN_DELAY_MULTIPLIER = 0.25f;
     private const int STRONG_ENEMY_CHANCE = 20;
+    private const float PLAYER_RADIUS = 35.0f; //Radius around player where enemies can't spawn
 
     private float _spawnDelay; //Time between each enemy is spawned
-    private float _spawnTimer = 0.0f;
+    private float _spawnTimer;
     public int _maxEnemies = 10; //Maximum number of enemies to be alive at one time
     public static int _aliveEnemies = 0; //Current number of enemies alive
-    [SerializeField] private float _playerRadius = 35.0f; //Radius around player where enemies can't spawn
 
     // Start is called before the first frame update
     private void Start()
     {
         _spawnDelay = 3.0f;
+        _spawnTimer = _spawnDelay - 1.0f; //First enemy spawns 1 second into game
     }
 
     // Update is called once per frame
@@ -77,7 +78,7 @@ public class EnemySpawner : MonoBehaviour
                 spawnPoint.tileY = randomNumber.Next(0 + MapGenerator._borderSize, MapGenerator._height - MapGenerator._borderSize - 1);
 
                 //If chosen position is within playerRadius, find a new position
-                Collider[] nearbyObjects = Physics.OverlapSphere(new Vector3(spawnPoint.tileX * MapGenerator._tileSize, 0.0f, spawnPoint.tileY * MapGenerator._tileSize), _playerRadius);
+                Collider[] nearbyObjects = Physics.OverlapSphere(new Vector3(spawnPoint.tileX * MapGenerator._tileSize, 0.0f, spawnPoint.tileY * MapGenerator._tileSize), PLAYER_RADIUS);
                 foreach (Collider obj in nearbyObjects)
                 {
                     if (obj.tag == "Player")

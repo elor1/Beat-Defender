@@ -6,8 +6,8 @@ public class ScaleCubes : MonoBehaviour
 {
     private const float INITIAL_SCALE = 0.7f;
     private const float SCALE_DECREASE = 3.0f;
-    private const float MAX_SCALE = 2.0f;
-    private const float RAISE_SCALE = 50.0f;
+    private const float MAX_SCALE = 3.0f;
+    private const float RAISE_SCALE = 100.0f;
     private const float MIN_HUE = 0.5f;
 
     private static GameObject _player;
@@ -87,7 +87,7 @@ public class ScaleCubes : MonoBehaviour
                 float distanceFromPlayer = Vector3.Distance(_player.transform.position, MapGenerator._mapGrid[x, y].obj.transform.position);
                 float hue = Mathf.Clamp(MapGenerator._mapGrid[x, y].obj.transform.localScale.y / MAX_SCALE, MIN_HUE, 1.0f);
                 float saturation = Mathf.Clamp(AudioAnalyser._currentAmplitude, 0.0f, 1.0f);
-                saturation = Mathf.Clamp(saturation * (1.0f / (distanceFromPlayer * (distanceFromPlayer / 2.0f) / maxDistanceToPlayer)), 0.0f, 1.0f);
+                saturation = Mathf.Clamp(saturation * (1.0f / (distanceFromPlayer * (distanceFromPlayer / 3.0f) / maxDistanceToPlayer)), 0.0f, 1.0f);
 
                 Color cubeColour = Color.HSVToRGB(hue, saturation, 1.0f);
                 Renderer cubeRenderer = MapGenerator._mapGrid[x, y].obj.GetComponent<Renderer>();

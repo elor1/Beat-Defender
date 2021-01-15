@@ -24,7 +24,7 @@ public class MapGenerator : MonoBehaviour
     }
 
 
-    [SerializeField] private static int _wallPercent = 45; //Chance that a tile will be a wall
+    [SerializeField] private static int _wallPercent = 47; //Chance that a tile will be a wall
 
     public static int _width = 80; //Width of map
     public static int _height = 60; //Height of map

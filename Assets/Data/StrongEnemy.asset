@@ -15,6 +15,6 @@ MonoBehaviour:
   _name: Strong
   _prefab: {fileID: 7894249172558929206, guid: 50238eaec43994745a35a6a711da8101, type: 3}
   _health: 15
-  _speed: 7000
+  _speed: 5000
   _damage: 10
-  _fireRate: 0.2
+  _fireRate: 0.25
