@@ -17,4 +17,4 @@ MonoBehaviour:
   _health: 15
   _speed: 5000
   _damage: 10
-  _fireRate: 0.25
+  _fireRate: 0.35

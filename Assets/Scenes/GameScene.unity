@@ -581,7 +581,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 79e3ac91f8bfe3c4eb92c3bae67aaa7f, type: 2}
   - {fileID: 11400000, guid: 63f2f16748c53994dbfe67623f45b95e, type: 2}
   _maxEnemies: 20
-  _playerRadius: 7
 --- !u!1 &810554928
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,7 +726,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9eb1fdd14bf60b74e9577a71b704aa01, type: 3}
+  m_audioClip: {fileID: 8300000, guid: bf2f270d65b900a4eb9feeaa0cf08097, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.124
   m_Pitch: 1
@@ -827,7 +826,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _screen: {fileID: 1670895960161706384}
   songs:
-  - {fileID: 8300000, guid: 9eb1fdd14bf60b74e9577a71b704aa01, type: 3}
+  - {fileID: 8300000, guid: bf2f270d65b900a4eb9feeaa0cf08097, type: 3}
+  - {fileID: 8300000, guid: b44b1695a00afd2429ca5ba3f23f52f1, type: 3}
+  - {fileID: 8300000, guid: 780ad08ac46035944b02609ed59af7c6, type: 3}
+  - {fileID: 8300000, guid: c0bf031122a0f854a8ba45d0a073a0c1, type: 3}
+  - {fileID: 8300000, guid: 7ac78b35b78e5e24d85bb16f0f07e5b6, type: 3}
 --- !u!114 &856942880
 MonoBehaviour:
   m_ObjectHideFlags: 0

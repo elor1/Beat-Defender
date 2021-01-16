@@ -25,8 +25,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject _screen;
 
-    public static int _playerStartingHealth = 100;
-    public static int _playerHealth = 100;
+    public static int _playerStartingHealth = 150;
+    public static int _playerHealth;
     public static int _playerDamage = 10;
     public static float _playerFireRate = 0.2f;
 
@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     };
 
     public static float _playerSpeed = 7000.0f;
-    public static float _projectileSpeed = 30.0f;
+    public static float _projectileSpeed = 40.0f;
 
     private int _upgradeBeatID = 4;
 
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     {
         
         //_currentGameState = State.Start;
-        _playerHealth = 100;
+        _playerHealth = _playerStartingHealth;
         _waveNumber = 0;
         _choosingUpgrade = false;
 

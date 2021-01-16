@@ -114,13 +114,13 @@ public class Game : MonoBehaviour
                         {
                             if (count == (int)Upgrade.ProjectileSpeed)
                             {
-                                GameManager._projectileSpeed *= 1.2f;
+                                GameManager._projectileSpeed *= 1.3f;
                                 GameManager._choosingUpgrade = false;
                                 Debug.Log("ProjSpeed");
                             }
                             else if (count == (int)Upgrade.MovementSpeed)
                             {
-                                GameManager._playerSpeed *= 1.1f;
+                                GameManager._playerSpeed *= 1.2f;
                                 GameManager._choosingUpgrade = false;
                                 Debug.Log("PlayerSpeed");
                             }
@@ -138,7 +138,7 @@ public class Game : MonoBehaviour
                             }
                             else if (count == (int)Upgrade.PlayerHealth)
                             {
-                                GameManager._playerStartingHealth += (int)(GameManager._playerStartingHealth * 0.2f);
+                                GameManager._playerStartingHealth += (int)(GameManager._playerStartingHealth * 0.5f);
                                 GameManager._choosingUpgrade = false;
                                 HealthBar._healthSlider.maxValue = GameManager._playerStartingHealth;
                                 Debug.Log("PlayerHealth");

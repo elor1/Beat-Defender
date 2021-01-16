@@ -38,7 +38,7 @@ public class MapGenerator : MonoBehaviour
 
     private static int _wallThreshold; //Any wall regions with a smaller number of tiles than this will be removed from the map
     private static int _roomThreshold; //Any room regions with a smaller number of tiles than this will be removed from the map
-    [SerializeField] private static int _pathRadius = 1; //The width of connections made between rooms
+    [SerializeField] private static int _pathRadius = 3; //The width of connections made between rooms
 
     [SerializeField] private GameObject _wallPrefab; //Drag the prefab for the wall into this field in the inspector
     [SerializeField] private GameObject _playerPrefab; //Drag the prefab for the player into this field in the inspector
