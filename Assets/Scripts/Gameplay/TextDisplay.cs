@@ -41,7 +41,11 @@ public class TextDisplay : MonoBehaviour
         {
             if (Game._currentBeat.ID <= 2)
             {
-                _displayText.fontSize = 150;
+                _displayText.fontSize = 100;
+            }
+            else if (Game._currentBeat.ID == 3)
+            {
+                _displayText.fontSize = 60;
             }
             else
             {

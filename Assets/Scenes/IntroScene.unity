@@ -490,6 +490,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1670895958906365699, guid: d9d5994383e93574bb7bdb24219d957c, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1670895958906365699, guid: d9d5994383e93574bb7bdb24219d957c, type: 3}
+      propertyPath: m_fontSize
+      value: 86
+      objectReference: {fileID: 0}
+    - target: {fileID: 1670895958906365699, guid: d9d5994383e93574bb7bdb24219d957c, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 150
+      objectReference: {fileID: 0}
     - target: {fileID: 1670895959732418922, guid: d9d5994383e93574bb7bdb24219d957c, type: 3}
       propertyPath: m_TagString
       value: Untagged

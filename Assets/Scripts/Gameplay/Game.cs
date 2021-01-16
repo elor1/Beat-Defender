@@ -67,7 +67,7 @@ public class Game : MonoBehaviour
 
     private void UpdateInput()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && GameManager._currentGameState == GameManager.State.Start)
         {
             if(_currentBeat != null)
             {
