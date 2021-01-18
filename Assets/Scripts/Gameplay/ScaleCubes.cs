@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class ScaleCubes : MonoBehaviour
 {
-    private const float INITIAL_SCALE = 0.7f;
-    private const float SCALE_DECREASE = 3.0f;
-    private const float MAX_SCALE = 3.0f;
-    private const float RAISE_SCALE = 100.0f;
-    private const float MIN_HUE = 0.5f;
+    private const float INITIAL_SCALE = 0.7f; //Starting/min scale of cubes
+    private const float SCALE_DECREASE = 3.0f; //Amount cubes scale decreases each frame
+    private const float MAX_SCALE = 3.0f; //Maximum scale cubes can have
+    private const float RAISE_SCALE = 100.0f; //Amount cubes are scaled up each beat
+    private const float MIN_HUE = 0.5f; //Minimum hue value a cube's colour can be
 
-    private static GameObject _player;
+    private static GameObject _player; //Player game object
+    private static float maxDistanceToPlayer; //The distance between the player and the furthest cube
 
-    private static float maxDistanceToPlayer = 0.0f;
     // Start is called before the first frame update
     void Start()
     {
         
         _player = GameObject.FindGameObjectWithTag("Player");
+        maxDistanceToPlayer = 0.0f;
 
         ResetScales();
     }
@@ -25,14 +26,15 @@ public class ScaleCubes : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int x = 0; x < MapGenerator._width; x++)
+        for (int x = 0; x < MapGenerator.Width; x++)
         {
-            for (int y = 0; y < MapGenerator._height; y++)
+            for (int y = 0; y < MapGenerator.Height; y++)
             {
-                if (MapGenerator._mapGrid[x, y]. type != MapGenerator.TileType.Room)
+                if (MapGenerator.MapGrid[x, y]. Type != MapGenerator.TileType.Room)
                 {
-                    MapGenerator._mapGrid[x, y].obj.transform.localScale = new Vector3(INITIAL_SCALE,
-                        Mathf.Clamp(MapGenerator._mapGrid[x, y].obj.transform.localScale.y - (Time.deltaTime * SCALE_DECREASE),
+                    //Decrease cube scales each frame
+                    MapGenerator.MapGrid[x, y].Obj.transform.localScale = new Vector3(INITIAL_SCALE,
+                        Mathf.Clamp(MapGenerator.MapGrid[x, y].Obj.transform.localScale.y - (Time.deltaTime * SCALE_DECREASE),
                         INITIAL_SCALE, MAX_SCALE), INITIAL_SCALE);
                 }
             }
@@ -46,11 +48,11 @@ public class ScaleCubes : MonoBehaviour
     /// </summary>
     public static void ResetScales()
     {
-        for (int x = 0; x < MapGenerator._width; x++)
+        for (int x = 0; x < MapGenerator.Width; x++)
         {
-            for (int y = 0; y < MapGenerator._height; y++)
+            for (int y = 0; y < MapGenerator.Height; y++)
             {
-                MapGenerator._mapGrid[x, y].obj.transform.localScale = new Vector3(INITIAL_SCALE, INITIAL_SCALE, INITIAL_SCALE);
+                MapGenerator.MapGrid[x, y].Obj.transform.localScale = new Vector3(INITIAL_SCALE, INITIAL_SCALE, INITIAL_SCALE);
             }
         }
     }
@@ -60,37 +62,44 @@ public class ScaleCubes : MonoBehaviour
     /// </summary>
     public static void RaiseWalls()
     {
-        //Debug.Log("BEAT");
         maxDistanceToPlayer = 0.0f;
-        for (int x = 0; x < MapGenerator._width; x++)
+        for (int x = 0; x < MapGenerator.Width; x++)
         {
-            for (int y = 0; y < MapGenerator._height; y++)
+            for (int y = 0; y < MapGenerator.Height; y++)
             {
-                float distanceFromPlayer = Vector3.Distance(_player.transform.position, MapGenerator._mapGrid[x, y].obj.transform.position);
+                float distanceFromPlayer = Vector3.Distance(_player.transform.position, MapGenerator.MapGrid[x, y].Obj.transform.position);
                 if (distanceFromPlayer > maxDistanceToPlayer)
                 {
                     maxDistanceToPlayer = distanceFromPlayer;
                 }
 
                 float yScale = RAISE_SCALE / ((distanceFromPlayer * distanceFromPlayer) * 0.35f);
-                MapGenerator._mapGrid[x, y].obj.transform.localScale = new Vector3(INITIAL_SCALE, Mathf.Clamp(Mathf.Abs(yScale), INITIAL_SCALE, MAX_SCALE), INITIAL_SCALE);
+                MapGenerator.MapGrid[x, y].Obj.transform.localScale = new Vector3(INITIAL_SCALE, Mathf.Clamp(Mathf.Abs(yScale), INITIAL_SCALE, MAX_SCALE), INITIAL_SCALE);
             }
         }
     }
 
+    /// <summary>
+    /// Colour each cube
+    /// </summary>
     private void ColourCubes()
     {
-        for (int x = 0; x < MapGenerator._width; x++)
+        for (int x = 0; x < MapGenerator.Width; x++)
         {
-            for (int y = 0; y < MapGenerator._height; y++)
+            for (int y = 0; y < MapGenerator.Height; y++)
             {
-                float distanceFromPlayer = Vector3.Distance(_player.transform.position, MapGenerator._mapGrid[x, y].obj.transform.position);
-                float hue = Mathf.Clamp(MapGenerator._mapGrid[x, y].obj.transform.localScale.y / MAX_SCALE, MIN_HUE, 1.0f);
-                float saturation = Mathf.Clamp(AudioAnalyser._currentAmplitude, 0.0f, 1.0f);
+                float distanceFromPlayer = Vector3.Distance(_player.transform.position, MapGenerator.MapGrid[x, y].Obj.transform.position);
+
+                //Hue is determined by scale
+                float hue = Mathf.Clamp(MapGenerator.MapGrid[x, y].Obj.transform.localScale.y / MAX_SCALE, MIN_HUE, 1.0f);
+
+                //Saturation is determined by current audio amplitude & distance from player
+                float saturation = Mathf.Clamp(AudioAnalyser.CurrentAmplitude, 0.0f, 1.0f);
                 saturation = Mathf.Clamp(saturation * (1.0f / (distanceFromPlayer * (distanceFromPlayer / 3.0f) / maxDistanceToPlayer)), 0.0f, 1.0f);
 
+                //Set cube colour
                 Color cubeColour = Color.HSVToRGB(hue, saturation, 1.0f);
-                Renderer cubeRenderer = MapGenerator._mapGrid[x, y].obj.GetComponent<Renderer>();
+                Renderer cubeRenderer = MapGenerator.MapGrid[x, y].Obj.GetComponent<Renderer>();
                 cubeRenderer.material.color = cubeColour;
             }
         }

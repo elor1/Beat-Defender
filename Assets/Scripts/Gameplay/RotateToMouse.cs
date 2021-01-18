@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RotateToMouse
 {
-    [SerializeField] private static float _maximumRayLength = 40.0f;
+    private const float MAX_RAY_LENGTH = 40.0f; //Maximum length of the mouse raycast
 
     /// <summary>
     /// Uses a raycast to get the position of the mouse
@@ -15,13 +15,13 @@ public class RotateToMouse
         Vector3 mousePosition = Input.mousePosition;
         Ray rayMouse = Camera.main.ScreenPointToRay(mousePosition);
 
-        if (Physics.Raycast(rayMouse.origin, rayMouse.direction, out hit, _maximumRayLength))
+        if (Physics.Raycast(rayMouse.origin, rayMouse.direction, out hit, MAX_RAY_LENGTH))
         {
             RotatePlayer(obj, hit.point);
         }
         else
         {
-            RotatePlayer(obj, rayMouse.GetPoint(_maximumRayLength));
+            RotatePlayer(obj, rayMouse.GetPoint(MAX_RAY_LENGTH));
         }
     }
 

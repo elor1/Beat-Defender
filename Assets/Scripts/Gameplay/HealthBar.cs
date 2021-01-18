@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    public static Slider _healthSlider;
+    public static Slider _healthSlider; //Health bar's slider component
 
     // Start is called before the first frame update
     void Start()
     {
         _healthSlider = GetComponent<Slider>();
-        _healthSlider.maxValue = GameManager._playerStartingHealth;
-        _healthSlider.value = GameManager._playerStartingHealth;
+        _healthSlider.maxValue = GameManager.PlayerStartingHealth;
+        _healthSlider.value = GameManager.PlayerStartingHealth;
     }
 
     // Update is called once per frame
@@ -20,7 +20,8 @@ public class HealthBar : MonoBehaviour
     {
         if (_healthSlider)
         {
-            _healthSlider.value = GameManager._playerHealth;
+            //Update health bar's value
+            _healthSlider.value = GameManager.PlayerHealth;
         }
     }
 }

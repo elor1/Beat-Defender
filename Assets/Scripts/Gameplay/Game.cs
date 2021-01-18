@@ -4,22 +4,6 @@ using System.Collections.Generic;
 
 public class Game : MonoBehaviour
 {
-    [SerializeField] public StoryData _data;
-
-    public TextDisplay _output;
-    public static BeatData _currentBeat;
-    private WaitForSeconds _wait;
-
-    public static Game _singleton;
-
-    private string[] _upgrades = { "Increase projectile speed", "Increase player speed", "Increase projectile damage", "Increase rate of fire", "Increase player health" };
-    //private Dictionary<string, GameManager.Upgrade> _upgradeChoiceIDs = new Dictionary<string, GameManager.Upgrade>()
-    //{
-    //    { "Increase projectile speed", GameManager.Upgrade.ProjectileSpeed },
-    //    { "Increase projectile damage", GameManager.Upgrade.ProjectileDamage },
-    //    { "Increase player speed", GameManager.Upgrade.MovementSpeed }
-    //};
-
     private enum Upgrade
     {
         ProjectileSpeed,
@@ -29,13 +13,14 @@ public class Game : MonoBehaviour
         PlayerHealth,
     }
 
-    //Beat ID for selected difficulties
-    public enum Difficulty
-    {
-        Easy = 5,
-        Medium = 6,
-        Hard = 7,
-    }
+    [SerializeField] private StoryData _data;
+    private TextDisplay _output;
+    private static BeatData _currentBeat;
+    private WaitForSeconds _wait;
+    private string[] _upgrades = { "Increase projectile speed", "Increase player speed", "Increase projectile damage", "Increase rate of fire", "Increase player health" };
+
+    public static Game _singleton;
+    public static BeatData CurrentBeat { get { return _currentBeat; } }
 
     private void Awake()
     {
@@ -43,7 +28,7 @@ public class Game : MonoBehaviour
         _currentBeat = null;
         _wait = new WaitForSeconds(0.5f);
 
-        _singleton = this;
+        _singleton = this;        
     }
 
     private void Update()
@@ -67,7 +52,7 @@ public class Game : MonoBehaviour
 
     private void UpdateInput()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && GameManager._currentGameState == GameManager.State.Start)
+        if (Input.GetKeyDown(KeyCode.Escape) && GameManager.CurrentGameState == GameManager.State.Start)
         {
             if(_currentBeat != null)
             {
@@ -86,7 +71,7 @@ public class Game : MonoBehaviour
             KeyCode alpha = KeyCode.Alpha1;
             KeyCode keypad = KeyCode.Keypad1;
 
-            if (GameManager._currentGameState == GameManager.State.Start)
+            if (GameManager.CurrentGameState == GameManager.State.Start)
             {
                 for (int count = 0; count < _currentBeat.Decision.Count; ++count)
                 {
@@ -114,33 +99,33 @@ public class Game : MonoBehaviour
                         {
                             if (count == (int)Upgrade.ProjectileSpeed)
                             {
-                                GameManager._projectileSpeed *= 1.3f;
-                                GameManager._choosingUpgrade = false;
+                                GameManager.ProjectileSpeed *= 1.3f;
+                                GameManager.ChoosingUpgrade = false;
                                 Debug.Log("ProjSpeed");
                             }
                             else if (count == (int)Upgrade.MovementSpeed)
                             {
-                                GameManager._playerSpeed *= 1.2f;
-                                GameManager._choosingUpgrade = false;
+                                GameManager.PlayerSpeed *= 1.2f;
+                                GameManager.ChoosingUpgrade = false;
                                 Debug.Log("PlayerSpeed");
                             }
                             else if (count == (int)Upgrade.ProjectileDamage)
                             {
-                                GameManager._playerDamage *= 2;
-                                GameManager._choosingUpgrade = false;
+                                GameManager.PlayerDamage *= 2;
+                                GameManager.ChoosingUpgrade = false;
                                 Debug.Log("ProjDamage");
                             }
                             else if (count == (int)Upgrade.RateOfFire)
                             {
-                                GameManager._playerFireRate -= 0.04f;
-                                GameManager._choosingUpgrade = false;
+                                GameManager.PlayerFireRate -= 0.04f;
+                                GameManager.ChoosingUpgrade = false;
                                 Debug.Log("FireRate");
                             }
                             else if (count == (int)Upgrade.PlayerHealth)
                             {
-                                GameManager._playerStartingHealth += (int)(GameManager._playerStartingHealth * 0.5f);
-                                GameManager._choosingUpgrade = false;
-                                HealthBar._healthSlider.maxValue = GameManager._playerStartingHealth;
+                                GameManager.PlayerStartingHealth += (int)(GameManager.PlayerStartingHealth * 0.5f);
+                                GameManager.ChoosingUpgrade = false;
+                                HealthBar._healthSlider.maxValue = GameManager.PlayerStartingHealth;
                                 Debug.Log("PlayerHealth");
                             }
                         }
@@ -174,14 +159,14 @@ public class Game : MonoBehaviour
 
         _output.Display(data.DisplayText);
 
-        if (GameManager._currentGameState == GameManager.State.Start)
+        if (GameManager.CurrentGameState == GameManager.State.Start)
         {
             while (_output.IsBusy)
             {
                 yield return null;
             }
         }
-        if (GameManager._currentGameState == GameManager.State.Start)
+        if (GameManager.CurrentGameState == GameManager.State.Start)
         {
             for (int count = 0; count < data.Decision.Count; ++count)
             {

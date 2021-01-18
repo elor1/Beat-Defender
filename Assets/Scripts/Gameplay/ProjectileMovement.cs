@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class ProjectileMovement : MonoBehaviour
 {
-    public float _speed = GameManager._projectileSpeed;
-    public GameObject _owner; //Who fired the projectile
-    //public float fireRate;
-    // Start is called before the first frame update
-    private void Start()
-    {
-        
-    }
+    private float _speed = GameManager.ProjectileSpeed; //Speed projectile should travel
 
+    public GameObject Owner; //Who fired the projectile
+    
     // Update is called once per frame
     private void Update()
     {
+        //Move projectile forwards
         if (_speed >= 0.0f)
         {
             transform.position += transform.forward * _speed * Time.deltaTime;
@@ -24,33 +20,32 @@ public class ProjectileMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-
-        Debug.Log(other.gameObject.tag);
+        //If projectile hits a wall, destroy it
         if (other.gameObject.tag == "Wall")
         {
             DestroyProjectile();
         }
 
-        if (other != null && _owner != null)
+        if (other != null && Owner != null)
         {
-            if (other.gameObject.tag == "Enemy" && _owner.tag == "Player")
+            if (other.gameObject.tag == "Enemy" && Owner.tag == "Player")
             {
-                //Decrease enemy health
+                //If player hits an enemy, decrease enemy health
                 EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
                 if (enemyMovement)
                 {
-                    ProjectileDamage.DecreaseHealth(ref enemyMovement._health, GameManager._playerDamage);
+                    ProjectileDamage.DecreaseHealth(ref enemyMovement.Health, GameManager.PlayerDamage);
                 }
                 
              DestroyProjectile();
             }
-            else if (other.gameObject.tag == "Player" && _owner.tag == "Enemy")
+            else if (other.gameObject.tag == "Player" && Owner.tag == "Enemy")
             {
-                //Decrease player health
-                EnemyMovement enemyMovement = _owner.gameObject.GetComponent<EnemyMovement>();
+                //If enemy hits player, decrease player health
+                EnemyMovement enemyMovement = Owner.gameObject.GetComponent<EnemyMovement>();
                 if (enemyMovement)
                 {
-                    ProjectileDamage.DecreaseHealth(ref GameManager._playerHealth, enemyMovement._damage);
+                    ProjectileDamage.DecreaseHealth(ref GameManager.PlayerHealth, enemyMovement.Damage);
                 }
 
                 DestroyProjectile();
@@ -59,6 +54,9 @@ public class ProjectileMovement : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Destroys the projectile game object
+    /// </summary>
     private void DestroyProjectile()
     {
         _speed = 0.0f;

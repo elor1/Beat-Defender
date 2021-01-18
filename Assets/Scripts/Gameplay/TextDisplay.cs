@@ -28,7 +28,7 @@ public class TextDisplay : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager._currentGameState == GameManager.State.WaveEnd)
+        if (GameManager.CurrentGameState == GameManager.State.WaveEnd)
         {
             _shortWait = new WaitForSeconds(0.01f);
         }
@@ -37,13 +37,13 @@ public class TextDisplay : MonoBehaviour
             _shortWait = new WaitForSeconds(0.03f);
         }
 
-        if (Game._currentBeat != null)
+        if (Game.CurrentBeat != null)
         {
-            if (Game._currentBeat.ID <= 2)
+            if (Game.CurrentBeat.ID <= 2)
             {
                 _displayText.fontSize = 100;
             }
-            else if (Game._currentBeat.ID == 3)
+            else if (Game.CurrentBeat.ID == 3)
             {
                 _displayText.fontSize = 60;
             }
@@ -133,7 +133,7 @@ public class TextDisplay : MonoBehaviour
     {
         if (_state == State.Idle)
         {
-            if (GameManager._currentGameState == GameManager.State.Start)
+            if (GameManager.CurrentGameState == GameManager.State.Start)
             {
                 StopAllCoroutines();
                 _state = State.Busy;

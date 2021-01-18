@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
+    private const int WALL_PERCENT = 47; //Chance that a tile will be a wall
+    private const int SMOOTH_ITERATIONS = 20; //Number of times the SmootWalls method is called when generating a new map
+    private const int PATH_RADIUS = 3; //The width of connections made between rooms
+    public const int TILE_SIZE = 1; //Size of each tile in map
+    public const int BORDER_SIZE = 7; //Number of wall blocks around each edge
+
     public enum TileType
     {
         Room,
@@ -23,32 +29,23 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-
-    [SerializeField] private static int _wallPercent = 47; //Chance that a tile will be a wall
-
-    public static int _width = 80; //Width of map
-    public static int _height = 60; //Height of map
-
-    //public static TileType[,] _mapGrid; //Wall data for each tile
-    //public GameObject[,] _walls; //Stores each instance of a wall
-    public static Tile[,] _mapGrid;
-    public static int _tileSize = 1; //Size of each tile in map
-    public static int _borderSize = 7; //Number of wall blocks around each edge. Used so that the camera can't see over the edge of the world
-    [SerializeField] private static int _smoothIterations = 20; //Number of times the SmootWalls method is called when generating a new map
-
-    private static int _wallThreshold; //Any wall regions with a smaller number of tiles than this will be removed from the map
-    private static int _roomThreshold; //Any room regions with a smaller number of tiles than this will be removed from the map
-    [SerializeField] private static int _pathRadius = 3; //The width of connections made between rooms
-
     [SerializeField] private GameObject _wallPrefab; //Drag the prefab for the wall into this field in the inspector
     [SerializeField] private GameObject _playerPrefab; //Drag the prefab for the player into this field in the inspector
-
+    private static int _width; //Width of map
+    private static int _height; //Height of map
+    private static Tile[,] _mapGrid; //Stores tile data for map
+    private static int _wallThreshold; //Any wall regions with a smaller number of tiles than this will be removed from the map
+    private static int _roomThreshold; //Any room regions with a smaller number of tiles than this will be removed from the map
     private static GameObject _playerModel; //Stores the actual player object
+
+    public static int Width { get { return _width; } }
+    public static int Height { get { return _height; } }
+    public static Tile[,] MapGrid { get { return _mapGrid; } }
 
     private void Awake()
     {
-        _width += _borderSize * 2;
-        _height += _borderSize * 2;
+        _width = 80 + BORDER_SIZE * 2;
+        _height = 60 + BORDER_SIZE * 2;
     }
 
     // Start is called before the first frame update
@@ -56,15 +53,15 @@ public class MapGenerator : MonoBehaviour
     {
         _wallThreshold = (_width * _height) / 100;
         _roomThreshold = (_width * _height) / 150;
-        //_mapGrid = new TileType[_width, _height];
+
         _mapGrid = new Tile[_width, _height];
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
                 _mapGrid[x, y] = new Tile();
-                _mapGrid[x, y].coord.tileX = x;
-                _mapGrid[x, y].coord.tileY = y;
+                _mapGrid[x, y]._coord.tileX = x;
+                _mapGrid[x, y]._coord.tileY = y;
             }
         }
 
@@ -73,33 +70,20 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = 0; y < _height; y++)
             {
-                if (x < _borderSize || x >= _width - _borderSize || y < _borderSize || y >= _height - _borderSize)
+                if (x < BORDER_SIZE || x >= _width - BORDER_SIZE || y < BORDER_SIZE || y >= _height - BORDER_SIZE)
                 {
-                    _mapGrid[x, y].type = TileType.Border;
+                    _mapGrid[x, y].Type = TileType.Border;
                 }
             }
         }
 
         _playerModel = Instantiate(_playerPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        if (_playerModel == null)
-        {
-            Debug.Log("NULL :(");
-        }
+       
         //Set camera to follow player
-        CameraFollowScript._target = _playerModel;
+        CameraFollowScript.Target = _playerModel;
+
         InstantiateWalls();
-
         GenerateMap();
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    GenerateMap();
-
-        //}
     }
 
     /// <summary>
@@ -110,30 +94,35 @@ public class MapGenerator : MonoBehaviour
     /// <returns>True or false</returns>
     public static bool IsInBounds(int x, int y)
     {
-        return (x >= _borderSize && x < _width - _borderSize & y >= _borderSize && y < _height - _borderSize);
+        return (x >= BORDER_SIZE && x < _width - BORDER_SIZE & y >= BORDER_SIZE && y < _height - BORDER_SIZE);
     }
 
+    /// <summary>
+    /// Instantiates wall prefabs for map grid
+    /// </summary>
     private void InstantiateWalls()
     {
-        //_walls = new GameObject[_width, _height];
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
                 //Create a wall block for each tile in mapGrid
-                _mapGrid[x, y].obj = Instantiate(_wallPrefab, new Vector3(x * _tileSize, 0.0f, y * _tileSize), Quaternion.identity) as GameObject;
+                _mapGrid[x, y].Obj = Instantiate(_wallPrefab, new Vector3(x * TILE_SIZE, 0.0f, y * TILE_SIZE), Quaternion.identity) as GameObject;
             }
         }
     }
 
+    /// <summary>
+    /// Generates a new map and spawns player
+    /// </summary>
     public static void GenerateMap()
     {
-        GameManager._waveNumber++;
+        GameManager.WaveNumber++;
         UpdateHUD.UpdateWaveNumber();
 
         FillMap();
 
-        for (int i = 0; i < _smoothIterations; i++)
+        for (int i = 0; i < SMOOTH_ITERATIONS; i++)
         {
             SmoothWalls();
         }
@@ -142,7 +131,6 @@ public class MapGenerator : MonoBehaviour
         RemoveSmallRegions(TileType.Room, _roomThreshold);
         HideWalls();
         SpawnPlayer();
-        //gameManager.currentState = GameManager.GameState.Playing;
 
         ScaleCubes.ResetScales();
         AudioAnalyser.ResetAmplitude();
@@ -161,21 +149,21 @@ public class MapGenerator : MonoBehaviour
             {
                 if (IsInBounds(x, y))
                 {
-                    if (x == _borderSize || x == _width - _borderSize - 1 || y == _borderSize || y == _height - _borderSize - 1)
+                    if (x == BORDER_SIZE || x == _width - BORDER_SIZE - 1 || y == BORDER_SIZE || y == _height - BORDER_SIZE - 1)
                     {
                         //Always set edge tiles to walls
-                        _mapGrid[x, y].type = TileType.Wall;
+                        _mapGrid[x, y].Type = TileType.Wall;
                     }
                     else
                     {
-                        //For each tile in the map grid, if the randomly generated number is less than the wallPercent, set its value to Wall
-                        if (randomNumber.Next(0, 100) < _wallPercent)
+                        //For each tile in the map grid, if the randomly generated number is less than the wall percent, set its value to Wall
+                        if (randomNumber.Next(0, 100) < WALL_PERCENT)
                         {
-                            _mapGrid[x, y].type = TileType.Wall;
+                            _mapGrid[x, y].Type = TileType.Wall;
                         }
                         else
                         {
-                            _mapGrid[x, y].type = TileType.Room;
+                            _mapGrid[x, y].Type = TileType.Room;
                         }
                     }
                 }
@@ -188,7 +176,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     /// <param name="gridX">X coordinate in grid map</param>
     /// <param name="gridY">Y coordinate in grid map</param>
-    /// <returns>Number of walls surrounding give tile</returns>
+    /// <returns>Number of walls surrounding given tile</returns>
     private static int GetNumberOfSurroundingWalls(int gridX, int gridY)
     {
         int wallCount = 0;
@@ -196,10 +184,10 @@ public class MapGenerator : MonoBehaviour
         {
             for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++)
             {
-                if ((neighbourX != gridX || neighbourY != gridY) && (_mapGrid[neighbourX, neighbourY].type != TileType.Room))
+                if ((neighbourX != gridX || neighbourY != gridY) && (_mapGrid[neighbourX, neighbourY].Type != TileType.Room))
                 {
                         //If the given tile is within the bounds of the map, for each of its surrounding tiles, add its grid value to wallCount
-                        wallCount += (int)_mapGrid[neighbourX, neighbourY].type;
+                        wallCount += (int)_mapGrid[neighbourX, neighbourY].Type;
                 }
             }
         }
@@ -223,11 +211,11 @@ public class MapGenerator : MonoBehaviour
 
                     if (surroundingWallCount > 4)
                     {
-                        _mapGrid[x, y].type = TileType.Wall;
+                        _mapGrid[x, y].Type = TileType.Wall;
                     }
                     else if (surroundingWallCount < 4)
                     {
-                        _mapGrid[x, y].type = TileType.Room;
+                        _mapGrid[x, y].Type = TileType.Room;
                     }
                 }
             }
@@ -244,7 +232,7 @@ public class MapGenerator : MonoBehaviour
     {
         List<Coordinate> tiles = new List<Coordinate>();
         int[,] checkedTiles = new int[_width, _height];
-        TileType tileType = _mapGrid[startX, startY].type;
+        TileType tileType = _mapGrid[startX, startY].Type;
 
         Queue<Coordinate> fillQueue = new Queue<Coordinate>();
         fillQueue.Enqueue(new Coordinate(startX, startY));
@@ -261,7 +249,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     if (IsInBounds(x, y) && (y == tile.tileY || x == tile.tileX))
                     {
-                        if (checkedTiles[x, y] == 0 && _mapGrid[x, y].type == tileType)
+                        if (checkedTiles[x, y] == 0 && _mapGrid[x, y].Type == tileType)
                         {
                             checkedTiles[x, y] = 1;
                             fillQueue.Enqueue(new Coordinate(x, y));
@@ -288,7 +276,7 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = 0; y < _height; y++)
             {
-                if (checkedTiles[x, y] == 0 && _mapGrid[x, y].type == tileType)
+                if (checkedTiles[x, y] == 0 && _mapGrid[x, y].Type == tileType)
                 {
                     List<Coordinate> newRegion = GetRegionTiles(x, y);
                     regions.Add(newRegion);
@@ -314,23 +302,24 @@ public class MapGenerator : MonoBehaviour
         List<RoomData> survivingRooms = new List<RoomData>();
         foreach (List<Coordinate> region in regions)
         {
+            //If a region has less tiles than the threshold, swap the tile type for all tiles in that region
             if (region.Count < threshold)
             {
                 foreach (Coordinate tile in region)
                 {
                     if (tileType == TileType.Wall)
                     {
-                        _mapGrid[tile.tileX, tile.tileY].type = TileType.Room;
+                        _mapGrid[tile.tileX, tile.tileY].Type = TileType.Room;
                     }
                     else
                     {
-                        _mapGrid[tile.tileX, tile.tileY].type = TileType.Wall;
+                        _mapGrid[tile.tileX, tile.tileY].Type = TileType.Wall;
                     }
                 }
             }
             else if (tileType == TileType.Room)
             {
-                //Add surviving rooms to a list so that they can be check for connections
+                //Add surviving rooms to a list so that they can be checked for connections
                 survivingRooms.Add(new RoomData(region, _mapGrid));
                 connectClosestRooms(survivingRooms);
             }
@@ -357,21 +346,24 @@ public class MapGenerator : MonoBehaviour
             {
                 if (room1 == room2)
                 {
+                    //Can't connect a room to itself
                     continue;
                 }
 
                 if (room1.IsConnected(room2))
                 {
+                    //Don't connect the same rooms twice
                     connectionFound = false;
                     break;
                 }
 
-                for (int tileIndex1 = 0; tileIndex1 < room1._edgeTiles.Count; tileIndex1++)
+                //If rooms are not connected, find the tiles from each room with the minimum distance
+                for (int tileIndex1 = 0; tileIndex1 < room1.EdgeTiles.Count; tileIndex1++)
                 {
-                    for (int tileIndex2 = 0; tileIndex2 < room2._edgeTiles.Count; tileIndex2++)
+                    for (int tileIndex2 = 0; tileIndex2 < room2.EdgeTiles.Count; tileIndex2++)
                     {
-                        Coordinate tile1 = room1._edgeTiles[tileIndex1];
-                        Coordinate tile2 = room2._edgeTiles[tileIndex2];
+                        Coordinate tile1 = room1.EdgeTiles[tileIndex1];
+                        Coordinate tile2 = room2.EdgeTiles[tileIndex2];
                         int distance = (tile1.tileX - tile2.tileX) * (tile1.tileX - tile2.tileX) + (tile1.tileY - tile2.tileY) * (tile1.tileY - tile2.tileY);
 
                         if (distance < minDistance || !connectionFound)
@@ -405,12 +397,11 @@ public class MapGenerator : MonoBehaviour
     private static void CreateConnection(RoomData room1, RoomData room2, Coordinate tile1, Coordinate tile2)
     {
         RoomData.ConnectRooms(room1, room2);
-        Debug.DrawLine(CoordToWorldPoint(tile1), CoordToWorldPoint(tile2), Color.green, 15);
 
         List<Coordinate> line = GetConnectionLine(tile1, tile2);
         foreach (Coordinate center in line)
         {
-            DrawCircle(center, _pathRadius);
+            DrawCircle(center, PATH_RADIUS);
         }
     }
 
@@ -432,7 +423,7 @@ public class MapGenerator : MonoBehaviour
                     int yPoint = center.tileY + y;
                     if (IsInBounds(xPoint, yPoint))
                     {
-                        _mapGrid[xPoint, yPoint].type = TileType.Room;
+                        _mapGrid[xPoint, yPoint].Type = TileType.Room;
                     }
                 }
             }
@@ -444,7 +435,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     /// <param name="start">Starting coordinate of line</param>
     /// <param name="end">Ending coordinate of line</param>
-    /// <returns>List coordinates in line</returns>
+    /// <returns>List of coordinates in line</returns>
     private static List<Coordinate> GetConnectionLine(Coordinate start, Coordinate end)
     {
         List<Coordinate> line = new List<Coordinate>();
@@ -503,17 +494,6 @@ public class MapGenerator : MonoBehaviour
         return line;
     }
 
-
-    /// <summary>
-    /// Converts a coordinate to a world point
-    /// </summary>
-    /// <param name="tile">Cooridinates of tile to convert</param>
-    /// <returns>Vector3 of position</returns>
-    private static Vector3 CoordToWorldPoint(Coordinate tile)
-    {
-        return new Vector3(tile.tileX * _tileSize, 1.0f, tile.tileY * _tileSize);
-    }
-
     /// <summary>
     /// Sets each wall game object to active or unactive depending on whether it should be visible or not
     /// </summary>
@@ -523,13 +503,13 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = 0; y < _height; y++)
             {
-                if (_mapGrid[x, y].type == TileType.Room)
+                if (_mapGrid[x, y].Type == TileType.Room)
                 {
-                    _mapGrid[x, y].obj.SetActive(false);
+                    _mapGrid[x, y].Obj.SetActive(false);
                 }
                 else
                 {
-                    _mapGrid[x, y].obj.SetActive(true);
+                    _mapGrid[x, y].Obj.SetActive(true);
                 }
             }
         }
@@ -543,20 +523,23 @@ public class MapGenerator : MonoBehaviour
         Coordinate spawnPoint = GetRandomRoomTile();
 
         //Move player to new spawn point
-        _playerModel.transform.position = new Vector3(spawnPoint.tileX * _tileSize, 0.0f, spawnPoint.tileY * _tileSize);
+        _playerModel.transform.position = new Vector3(spawnPoint.tileX * TILE_SIZE, 0.0f, spawnPoint.tileY * TILE_SIZE);
     }
 
+    /// <summary>
+    /// Finds a random valid spawn point
+    /// </summary>
+    /// <returns>Spawn point coordinates</returns>
     public static Coordinate GetRandomRoomTile()
     {
         Coordinate spawnPoint = new Coordinate();
         System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
 
         //Generate random spawn points until one is found within the walls
-        while (_mapGrid[spawnPoint.tileX, spawnPoint.tileY].type != TileType.Room)
+        while (_mapGrid[spawnPoint.tileX, spawnPoint.tileY].Type != TileType.Room)
         {
-            Debug.Log("New spawn point");
-            spawnPoint.tileX = randomNumber.Next(0 + _borderSize, _width - _borderSize - 1);
-            spawnPoint.tileY = randomNumber.Next(0 + _borderSize, _height - _borderSize - 1);
+            spawnPoint.tileX = randomNumber.Next(0 + BORDER_SIZE, _width - BORDER_SIZE - 1);
+            spawnPoint.tileY = randomNumber.Next(0 + BORDER_SIZE, _height - BORDER_SIZE - 1);
         }
 
         return spawnPoint;

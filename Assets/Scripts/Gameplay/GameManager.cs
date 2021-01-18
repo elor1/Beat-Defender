@@ -5,6 +5,8 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
+    private const int UPGRADE_BEAT_ID = 4; //ID of upgrade screen beat
+
     public enum State
     {
         Start,
@@ -13,54 +15,47 @@ public class GameManager : MonoBehaviour
         Over,
     }
 
-    public enum Upgrade
-    {
-        ProjectileSpeed,
-        MovementSpeed,
-        ProjectileDamage,
-    }
+    [SerializeField] private GameObject _screen; //Screen used to display upgrades
+    private static State _currentGameState = State.Start; //Current state of the game
+    private static int _playerStartingHealth; //Player's health at the start of the wave
+    private static int _playerDamage; //Player damage amount
+    private static float _playerFireRate; //Player's fire rate
+    private static float _playerSpeed; //Player's move speed
+    private static float _projectileSpeed; //Player projectile speed
+    private static int _waveNumber; //Current wave number
+    private static bool _choosingUpgrade; //Checks whether player is currently choosing an upgrade
+    private AudioSource _audioSource; //Game's main audio source
+    [SerializeField] private AudioClip[] _songs; //Songs to be added in inspector
+    private int _currentSongIndex; //Index of song currently playing
+    private float _timePlaying; //Number of seconds left before current song ends
 
-    private float _upgradeTimer = 2.0f;
-    public static State _currentGameState = State.Start;
-
-    [SerializeField] private GameObject _screen;
-
-    public static int _playerStartingHealth = 150;
-    public static int _playerHealth;
-    public static int _playerDamage = 10;
-    public static float _playerFireRate = 0.2f;
-
-    public static int _waveNumber;
-    public static bool _choosingUpgrade;
-
-    public static AudioSource _audioSource;
-    [SerializeField] private AudioClip[] songs; //Songs to be added in inspector
-    private int _currentSongIndex;
-    private float _timePlaying;
-
-    private int[] _upgradeIDs = { 8 };
-    private Dictionary<int, Upgrade> _upgradeChoiceIDs = new Dictionary<int, Upgrade>()
-    {
-        { 9, Upgrade.ProjectileSpeed },
-        { 10, Upgrade.ProjectileDamage }
-    };
-
-    public static float _playerSpeed = 7000.0f;
-    public static float _projectileSpeed = 40.0f;
-
-    private int _upgradeBeatID = 4;
+    public static int PlayerHealth; //Player's current health
+    public static State CurrentGameState { get { return _currentGameState; } set { _currentGameState = value; } }
+    public static int PlayerStartingHealth { get { return _playerStartingHealth; } set { _playerStartingHealth = value; } }
+    public static int PlayerDamage { get { return _playerDamage; } set { _playerDamage = value; } }
+    public static float PlayerFireRate { get { return _playerFireRate; } set { _playerFireRate = value; } }
+    public static float PlayerSpeed { get { return _playerSpeed; } set { _playerSpeed = value; } }
+    public static float ProjectileSpeed { get { return _projectileSpeed; } set { _projectileSpeed = value; } }
+    public static int WaveNumber { get { return _waveNumber; } set { _waveNumber = value; } }
+    public static bool ChoosingUpgrade { set { _choosingUpgrade = value; } }
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+
         //_currentGameState = State.Start;
-        _playerHealth = _playerStartingHealth;
+        _playerStartingHealth = 150;
+        PlayerHealth = _playerStartingHealth;
+        _playerDamage = 10;
+        _playerFireRate = 0.2f;
+        _playerSpeed = 7000.0f;
+        _projectileSpeed = 40.0f;
+
         _waveNumber = 0;
         _choosingUpgrade = false;
 
         _audioSource = GetComponent<AudioSource>();
-        _audioSource.clip = songs[0];
+        _audioSource.clip = _songs[0];
         _currentSongIndex = 0;
         _timePlaying = _audioSource.clip.length;
 
@@ -72,115 +67,58 @@ public class GameManager : MonoBehaviour
     {
         _timePlaying -= Time.deltaTime;
 
-        if (_playerHealth <= 0)
+        //If player runs out of health, game is over
+        if (PlayerHealth <= 0)
         {
-            //Player is dead. Game over.
+            //Change game state and scene
             _currentGameState = State.Over;
             _audioSource.Stop();
             SceneManager.SwitchScene("EndScene");
             Debug.Log("GAME OVER");
         }
         
+        //When player has finished choosing upgrades, start new wave
         if (_currentGameState == State.WaveEnd && !_choosingUpgrade)
         {
-            //Upgrades();
             MapGenerator.GenerateMap();
             ChangeSong();
-
-            Debug.Log("Cleared screen");
+            
             _screen.SetActive(false);
             _currentGameState = State.Playing;
-            _playerHealth = _playerStartingHealth;
+            PlayerHealth = _playerStartingHealth;
         }
 
+        //When song finishes, wave ends
         if (_timePlaying <= 0.0f)
         {
-            //Wave over
             _currentGameState = State.WaveEnd;
-
-            Debug.Log("Wave over");
-            //DestroyEnemies();
-            UpdateScreen();
-            //_waveNumber++;
-            //MapGenerator.GenerateMap();
-            // ChangeSong();
-            //_timePlaying = 5000.0f;
+            ShowUpgradeScreen();
         }
     }
 
-    private void DestroyEnemies()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies != null)
-        {
-            foreach(GameObject enemy in enemies)
-            {
-                EnemyMovement movementScript = enemy.GetComponent<EnemyMovement>();
-                if (movementScript)
-                {
-                    //Destroy(movementScript);
-                    movementScript._isAlive = false;
-                }
-                //Destroy(enemy);
-            }
-        }
-    }
-
+    /// <summary>
+    /// Changes song to next one in list
+    /// </summary>
     private void ChangeSong()
     {
         _currentSongIndex++;
-        if (_currentSongIndex >= songs.Length)
+        if (_currentSongIndex >= _songs.Length)
         {
             _currentSongIndex = 0;
         }
-        _audioSource.clip = songs[_currentSongIndex];
+        _audioSource.clip = _songs[_currentSongIndex];
         _timePlaying = _audioSource.clip.length;
         _audioSource.Play();
     }
 
-    private void UpdateScreen()
+    /// <summary>
+    /// Displays upgrade screen
+    /// </summary>
+    private void ShowUpgradeScreen()
     {
         _choosingUpgrade = true;
         _screen.SetActive(true);
-        //Game._singleton.DisplayBeat(8);
-        //Game._currentBeat = Game._singleton._data.GetBeatById(8);
-        //Game._singleton.CancelInvoke();
-        //System.Random randomNumber = new System.Random(System.DateTime.Now.GetHashCode());
-        //Game._singleton.DisplayBeat(_upgradeIDs[randomNumber.Next(0, _upgradeIDs.Length - 1)]);
-        Game._singleton.DisplayBeat(_upgradeBeatID);
+        Game._singleton.DisplayBeat(UPGRADE_BEAT_ID);
         _timePlaying = 5000.0f;
-    }
-
-    private void Upgrades()
-    {
-        _upgradeTimer -= Time.deltaTime;
-        if (_upgradeChoiceIDs.ContainsKey(Game._currentBeat.ID))
-        {
-            if (_upgradeTimer <= 0.0f)
-            {
-                _upgradeTimer = 2.0f;
-                Upgrade upgradeType;
-                _upgradeChoiceIDs.TryGetValue(Game._currentBeat.ID, out upgradeType);
-                switch (upgradeType)
-                {
-                    case Upgrade.MovementSpeed:
-                        _playerSpeed *= 1.1f;
-                        break;
-                    case Upgrade.ProjectileDamage:
-                        _playerDamage *= 2;
-                        break;
-                    case Upgrade.ProjectileSpeed:
-                        _projectileSpeed *= 1.2f;
-                        break;
-                }
-
-                MapGenerator.GenerateMap();
-                ChangeSong();
-                
-                Debug.Log("Cleared screen");
-                _screen.SetActive(false);
-                _currentGameState = State.Playing;
-            }
-        }
     }
 }

@@ -5,9 +5,9 @@ using TMPro;
 
 public class UpdateHUD : MonoBehaviour
 {
-    private static TMP_Text _displayText;
+    private const string WAVE_TEXT = "Wave number: "; //HUD wave label
 
-    private const string _waveText = "Wave number: ";
+    private static TMP_Text _displayText; //HUD text component
 
     // Start is called before the first frame update
     void Start()
@@ -15,14 +15,11 @@ public class UpdateHUD : MonoBehaviour
         _displayText = GetComponent<TMP_Text>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Update HUD's display to show current wave number
+    /// </summary>
     public static void UpdateWaveNumber()
     {
-        _displayText.text = _waveText + GameManager._waveNumber.ToString();
+        _displayText.text = WAVE_TEXT + GameManager.WaveNumber.ToString();
     }
 }

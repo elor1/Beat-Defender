@@ -11,18 +11,10 @@ public class SceneManager : MonoBehaviour
         DontDestroyOnLoad(transform.gameObject);//Stop SceneManager from being destroyed when switching scenes
     }
 
-    // Start is called before the first frame update
-    private void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Switches scene to given scene name
+    /// </summary>
+    /// <param name="sceneName">Scene to switch to</param>
     public static void SwitchScene (string sceneName)
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);

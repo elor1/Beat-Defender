@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class RoomData
 {
-    public List<MapGenerator.Coordinate> _tiles;
-    public List<MapGenerator.Coordinate> _edgeTiles;
-    public List<RoomData> _connectedRooms;
-    public int _roomSize;
+    private List<MapGenerator.Coordinate> _tiles; //List of coordinates in room
+    private List<MapGenerator.Coordinate> _edgeTiles; //List of coordinates on edge of room
+    private List<RoomData> _connectedRooms; //List of connected rooms
+
+    public List<MapGenerator.Coordinate> EdgeTiles { get { return _edgeTiles; } }
 
     public RoomData() { }
 
@@ -19,7 +20,6 @@ public class RoomData
     public RoomData(List<MapGenerator.Coordinate> roomTiles, Tile[,] mapGrid)
     {
         _tiles = roomTiles;
-        _roomSize = _tiles.Count;
         _connectedRooms = new List<RoomData>();
 
         _edgeTiles = new List<MapGenerator.Coordinate>();
@@ -31,7 +31,7 @@ public class RoomData
                 {
                     if (x == tile.tileX || y == tile.tileY)
                     {
-                        if (mapGrid[x, y].type == MapGenerator.TileType.Wall)
+                        if (mapGrid[x, y].Type == MapGenerator.TileType.Wall)
                         {
                             _edgeTiles.Add(tile);
                         }

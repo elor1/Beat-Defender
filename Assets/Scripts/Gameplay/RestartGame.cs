@@ -4,21 +4,12 @@ using UnityEngine;
 
 public class RestartGame : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Goes back to menu screen and resets the game
+    /// </summary>
     public void Restart()
     {
-        GameManager._currentGameState = GameManager.State.Start;
+        GameManager.CurrentGameState = GameManager.State.Start;
         SceneManager.SwitchScene("IntroScene");
     }
 }

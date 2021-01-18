@@ -825,12 +825,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _screen: {fileID: 1670895960161706384}
-  songs:
+  _songs:
   - {fileID: 8300000, guid: bf2f270d65b900a4eb9feeaa0cf08097, type: 3}
   - {fileID: 8300000, guid: b44b1695a00afd2429ca5ba3f23f52f1, type: 3}
   - {fileID: 8300000, guid: 780ad08ac46035944b02609ed59af7c6, type: 3}
-  - {fileID: 8300000, guid: c0bf031122a0f854a8ba45d0a073a0c1, type: 3}
   - {fileID: 8300000, guid: 7ac78b35b78e5e24d85bb16f0f07e5b6, type: 3}
+  - {fileID: 8300000, guid: c0bf031122a0f854a8ba45d0a073a0c1, type: 3}
 --- !u!114 &856942880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1110,8 +1110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c50f2c6ad61f3b439985369a7614176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _offsetY: 16.24
-  _offsetZ: -10.3
 --- !u!1 &1417159751
 GameObject:
   m_ObjectHideFlags: 0

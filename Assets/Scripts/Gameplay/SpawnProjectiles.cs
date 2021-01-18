@@ -4,55 +4,37 @@ using UnityEngine;
 
 public class SpawnProjectiles : MonoBehaviour
 {
-
-    public GameObject _firePoint;
-    private float _timePassed = 0.0f;
-
-    [SerializeField] private GameObject particleToSpawn;
-    // Start is called before the first frame update
-    private void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        _timePassed += Time.deltaTime;
-        //Debug.Log(timePassed);
-        //if (Input.GetMouseButton(0))
-        //{
-        //    SpawnParticle();
-        //}
-      
-    }
-
+    [SerializeField] private GameObject _firePoint; //Place to spawn projectile
+    [SerializeField] private GameObject particleToSpawn; //Choose particle to spawn in editor
+    
+    /// <summary>
+    /// Instantiates a particle at a give position
+    /// </summary>
+    /// <param name="colour">Colour of particle</param>
     public void SpawnParticle(Color colour)
     {
         GameObject particle;
         particle = Instantiate(particleToSpawn, _firePoint.transform.position, Quaternion.identity);
         ParticleSystem particleSystem = particle.GetComponentInChildren<ParticleSystem>();
         TrailRenderer trail = particle.GetComponentInChildren<TrailRenderer>();
+
+        //Set particle colour
         if (particleSystem)
         {
-            //Debug.Log("COLOUR CHANGED");
             var main = particleSystem.main;
             main.startColor = colour;
         }
+
+        //Set trail colour
         if (trail)
         {
             trail.startColor = colour;
             trail.endColor = new Color(colour.r, colour.g, colour.b, 0.0f);
         }
-        particle.GetComponent<ProjectileMovement>()._owner = gameObject;
-        //RotateToMouse.GetMousePosition(particle);
+
+        //Set owner of particle to object that fired it
+        particle.GetComponent<ProjectileMovement>().Owner = gameObject;
+        
         particle.transform.forward = gameObject.transform.forward;
-
-        _timePassed = 0.0f;
-        //if (_firePoint != null && _timePassed >= fireRate)
-        //{
-
-        //}
-        //_timePassed += Time.deltaTime;
     }
 }

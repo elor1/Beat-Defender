@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class CameraFollowScript : MonoBehaviour
 {
-    [SerializeField] private float _offsetY = 60;
-    [SerializeField] private float _offsetZ = -20;
-    public static GameObject _target; //Object camera will follow
+    private const float OFFSET_Y = 16.24f; //Camera's offset on the Y axis
+    private const float OFFSET_Z = -10.3f;//Camera's offeset on the Z axis
 
-    // Start is called before the first frame update
-    private void Start()
-    {
+    private static GameObject _target; //Object camera will follow
 
-    }
-
+    public static GameObject Target { set { _target = value; } }
+    
     // Update is called once per frame
     private void Update()
     {
-        transform.position = new Vector3(_target.transform.position.x, _target.transform.position.y + _offsetY, _target.transform.position.z + _offsetZ);
+        //Update camera's position
+        transform.position = new Vector3(_target.transform.position.x, _target.transform.position.y + OFFSET_Y, _target.transform.position.z + OFFSET_Z);
     }
 }

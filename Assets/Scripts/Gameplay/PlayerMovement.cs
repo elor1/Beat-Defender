@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private Rigidbody _rb; //Player's rigidbody component
-    private SpawnProjectiles _projectileSpawner;
-    private float _timePassed;
-
-    //public float _movementSpeed = 7000.0f; //Speed multiplier for player movement
-
+    private Rigidbody _rigidbody; //Player's rigidbody component
+    private SpawnProjectiles _projectileSpawner; //Player's projectile spawner component
+    private float _timePassed; //Time since last projectile was fired
+    
     // Start is called before the first frame update
     private void Start()
     {
-        _rb = GetComponent<Rigidbody>(); //Get rigidbody component
+        _rigidbody = GetComponent<Rigidbody>(); //Get rigidbody component
         _projectileSpawner = GetComponent<SpawnProjectiles>();
         _timePassed = 0.0f;
     }
@@ -21,26 +19,27 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (GameManager._currentGameState == GameManager.State.Playing)
+        if (GameManager.CurrentGameState == GameManager.State.Playing)
         {
-            if (_rb != null)
+            if (_rigidbody != null)
             {
                 MovePlayer();
                 RotateToMouse.GetMousePosition(gameObject);
             }
         }
+
         _timePassed += Time.deltaTime;
     }
 
     private void LateUpdate()
     {
-        //Debug.Log(GameManager._currentGameState);
-        if (GameManager._currentGameState == GameManager.State.Playing)
+        if (GameManager.CurrentGameState == GameManager.State.Playing)
         {
+            //When left click is pressed, fire projectile
             if (Input.GetMouseButton(0))
             {
                 Color particleColour = new Color(Random.Range(0.149f, 0.404f), Random.Range(0.906f, 0.945f), Random.Range(0.267f, 0.694f), 1.0f);
-                if (_timePassed >= GameManager._playerFireRate)
+                if (_timePassed >= GameManager.PlayerFireRate)
                 {
                     _projectileSpawner.SpawnParticle(particleColour);
                     _timePassed = 0.0f;
@@ -78,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
             movementDirection += new Vector3(1.0f, 0.0f, 0.0f);
         }
 
-        _rb.AddForce(movementDirection.normalized * GameManager._playerSpeed * Time.deltaTime);
+        //Move player
+        _rigidbody.AddForce(movementDirection.normalized * GameManager.PlayerSpeed * Time.deltaTime);
     }
 }

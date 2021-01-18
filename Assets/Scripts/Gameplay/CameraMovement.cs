@@ -5,38 +5,47 @@ using UnityEngine.SceneManagement;
 
 public class CameraMovement : MonoBehaviour
 {
-    private Animator _anim; //Camera's animator component
-    [SerializeField] private float _zoomPauseTime = 2.0f; //Number of seconds to wait before zooming camera
-    [SerializeField] private float _scenePauseTime = 1.5f; //Number of seconds to wait before switching scenes
+    private const int PLAY_BEAT_ID = 2; //Beat ID to trigger 'Play game'
+
+    private Animator _animator; //Camera's animator component
+    private float _zoomPauseTime; //Number of seconds to wait before zooming camera
+    private float _scenePauseTime; //Number of seconds to wait before switching scenes
 
     // Start is called before the first frame update
     private void Start()
     {
-        _anim = GetComponent<Animator>();
-        _anim.SetBool("IsZooming", false);
+        _animator = GetComponent<Animator>();
+        _animator.SetBool("IsZooming", false);
+
+        _zoomPauseTime = 2.0f;
+        _scenePauseTime = 1.5f;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (Game._currentBeat != null)
+        if (Game.CurrentBeat != null)
         {
-            //When player selects a difficulty, zoom camera and start game
-            if (Game._currentBeat.ID == 2)
+            //When player selects 'Play game', zoom camera and start game
+            if (Game.CurrentBeat.ID == PLAY_BEAT_ID)
             {
                 ZoomCamera();
             }
         }
     }
 
+    /// <summary>
+    /// Triggers camera zoom animation
+    /// </summary>
     private void ZoomCamera()
     {
-        if (_anim.GetBool("IsZooming"))
+        if (_animator.GetBool("IsZooming"))
         {
             if (_scenePauseTime <= 0.0f)
             {
-                GameManager._currentGameState = GameManager.State.Playing;
-                Debug.Log(GameManager._currentGameState);
+                //Switch to game scene
+                GameManager.CurrentGameState = GameManager.State.Playing;
+                Debug.Log(GameManager.CurrentGameState);
                 SceneManager.SwitchScene("GameScene");
             }
             else
@@ -48,7 +57,7 @@ public class CameraMovement : MonoBehaviour
         {
             if (_zoomPauseTime <= 0.0f)
             {
-                _anim.SetBool("IsZooming", true);
+                _animator.SetBool("IsZooming", true);
             }
             else
             {
