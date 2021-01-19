@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         _playerSpeed = 7000.0f;
         _projectileSpeed = 40.0f;
 
-        _waveNumber = 0;
+        _waveNumber = -1;
         _choosingUpgrade = false;
 
         _audioSource = GetComponent<AudioSource>();

@@ -580,7 +580,6 @@ MonoBehaviour:
   enemyTypes:
   - {fileID: 11400000, guid: 79e3ac91f8bfe3c4eb92c3bae67aaa7f, type: 2}
   - {fileID: 11400000, guid: 63f2f16748c53994dbfe67623f45b95e, type: 2}
-  _maxEnemies: 20
 --- !u!1 &810554928
 GameObject:
   m_ObjectHideFlags: 0
@@ -829,8 +828,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: bf2f270d65b900a4eb9feeaa0cf08097, type: 3}
   - {fileID: 8300000, guid: b44b1695a00afd2429ca5ba3f23f52f1, type: 3}
   - {fileID: 8300000, guid: 780ad08ac46035944b02609ed59af7c6, type: 3}
-  - {fileID: 8300000, guid: 7ac78b35b78e5e24d85bb16f0f07e5b6, type: 3}
   - {fileID: 8300000, guid: c0bf031122a0f854a8ba45d0a073a0c1, type: 3}
+  - {fileID: 8300000, guid: 7ac78b35b78e5e24d85bb16f0f07e5b6, type: 3}
 --- !u!114 &856942880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1694,7 +1693,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data: {fileID: 11400000, guid: 03cbbe32d42b96d45b61c384a692dc19, type: 2}
-  _output: {fileID: 0}
 --- !u!114 &1670895960161706386
 MonoBehaviour:
   m_ObjectHideFlags: 0

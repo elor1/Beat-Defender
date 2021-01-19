@@ -9,7 +9,7 @@ public class EnemySpawner : MonoBehaviour
     private const float MAX_SPAWN_DELAY = 7.0f; //Maximum seconds between enemies spawning
     private const int INITIAL_MAX_ENEMIES = 6; //Initial maximum number of enemies alive at once
     private const int MAX_ENEMIES_MULTIPLIER = 2; //Amount maximum number of enemies is increased each wave
-    private const float WAVE_SPAWN_DELAY_MULTIPLIER = 0.25f; //Amount spawn delay is decreased each round
+    private const float WAVE_SPAWN_DELAY_MULTIPLIER = 0.15f; //Amount spawn delay is decreased each round
     private const int STRONG_ENEMY_CHANCE = 20; //Percentage chance of strong enemy being spawned
     private const float PLAYER_RADIUS = 20.0f; //Radius around player where enemies can't spawn
 
@@ -30,7 +30,7 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        _spawnDelay = 3.0f;
+        _spawnDelay = 2.5f;
         _spawnTimer = _spawnDelay - 1.0f; //First enemy spawns 1 second into game
 
         _maxEnemies = 10;
@@ -43,13 +43,15 @@ public class EnemySpawner : MonoBehaviour
         //The higher the average amplitude, the faster enemies spawn
         _spawnDelay = Mathf.Clamp(SPAWN_DELAY_MULTIPLIER / AudioAnalyser.AverageAmplitude, MIN_SPAWN_DELAY, MAX_SPAWN_DELAY);
 
-        //The higher the wave number, enemies spawn faster and max number of enemies increases
-        if (GameManager.WaveNumber > 1)
-        {
-            _maxEnemies = INITIAL_MAX_ENEMIES + (GameManager.WaveNumber * MAX_ENEMIES_MULTIPLIER);
-            _spawnDelay = Mathf.Clamp(_spawnDelay - (GameManager.WaveNumber * WAVE_SPAWN_DELAY_MULTIPLIER), MIN_SPAWN_DELAY, MAX_SPAWN_DELAY);
-        }
-        
+        ////The higher the wave number, enemies spawn faster and max number of enemies increases
+        //if (GameManager.WaveNumber > 1)
+        //{
+
+        //}
+
+        _maxEnemies = INITIAL_MAX_ENEMIES + (GameManager.WaveNumber * MAX_ENEMIES_MULTIPLIER);
+        _spawnDelay = Mathf.Clamp(_spawnDelay - (GameManager.WaveNumber * WAVE_SPAWN_DELAY_MULTIPLIER), MIN_SPAWN_DELAY, MAX_SPAWN_DELAY);
+
         if (GameManager.CurrentGameState == GameManager.State.Playing)
         {
             _spawnTimer += Time.deltaTime;

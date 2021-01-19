@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    private const float FREQUENCY_MULTIPLIER = 0.00125f; //Amount loudest current frequency is multiplied by to increase fire rate
+    private const float FREQUENCY_MULTIPLIER = 0.00225f; //Amount loudest current frequency is multiplied by to increase fire rate
     private const int HEALTH_MULTIPLIER = 3; //Amount of health increase to enemies with each wave
-    private const float FIRE_RATE_MULTIPLIER = 0.01f; //Amount rate of fire is increased each wave
-    private const int DAMAGE_MULTIPLIER = 2; //Amount of damage increase enemies get each wave
+    private const float FIRE_RATE_MULTIPLIER = 0.007f; //Amount rate of fire is increased each wave
+    private const int DAMAGE_MULTIPLIER = 1; //Amount of damage increase enemies get each wave
     private const float PLAYER_RADIUS = 10.0f; //Radius around player that enemies can't enter
 
     [SerializeField] private EnemyData _enemyData; //Enemy data scriptable object for enemy type
@@ -34,20 +34,22 @@ public class EnemyMovement : MonoBehaviour
         _pathfinding = GetComponent<Pathfinding>();
         _projectileSpawner = GetComponent<SpawnProjectiles>();
 
-        //Set enemy stats
-        if (GameManager.WaveNumber > 1)
-        {
-            //Increase enemy stats with each wave
-            Health = _enemyData.Health + (GameManager.WaveNumber * HEALTH_MULTIPLIER);
-            _fireRate = _enemyData.FireRate - (GameManager.WaveNumber * FIRE_RATE_MULTIPLIER);
-            _damage = _enemyData.Damage + (GameManager.WaveNumber * DAMAGE_MULTIPLIER);
-        }
-        else
-        {
-            Health = _enemyData.Health;
-            _fireRate = _enemyData.FireRate;
-            _damage = _enemyData.Damage;
-        }
+        ////Set enemy stats
+        //if (GameManager.WaveNumber > 1)
+        //{
+
+        //}
+        //else
+        //{
+        //    Health = _enemyData.Health;
+        //    _fireRate = _enemyData.FireRate;
+        //    _damage = _enemyData.Damage;
+        //}
+
+        //Increase enemy stats with each wave
+        Health = _enemyData.Health + (GameManager.WaveNumber * HEALTH_MULTIPLIER);
+        _fireRate = _enemyData.FireRate - (GameManager.WaveNumber * FIRE_RATE_MULTIPLIER);
+        _damage = _enemyData.Damage + (GameManager.WaveNumber * DAMAGE_MULTIPLIER);
 
         _fireRate -= AudioAnalyser.LoudestFrequency * FREQUENCY_MULTIPLIER;
 

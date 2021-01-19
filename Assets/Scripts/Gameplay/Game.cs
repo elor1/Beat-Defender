@@ -4,6 +4,12 @@ using System.Collections.Generic;
 
 public class Game : MonoBehaviour
 {
+    private const float PROJECTILE_SPEED_MULTIPLIER = 1.3f; //Multiplier for projectile speed upgrade
+    private const float PLAYER_SPEED_MULTIPLIER = 1.2f; //Multiplier for player speed upgrae
+    private const int PLAYER_DAMAGE_MULTIPLIER = 2; //Multiplier for player damage upgrade
+    private const float RATE_OF_FIRE_MULTIPLIER = 0.04f; //Multiplier for rate of fire upgrade
+    private const float PLAYER_HEALTH_MULTIPLIER = 0.4f; //Multiplier for player health upgrade
+
     private enum Upgrade
     {
         ProjectileSpeed,
@@ -39,10 +45,6 @@ public class Game : MonoBehaviour
             {
                 DisplayBeat(1);
             }
-            //else if (_currentBeat.ID > 10)
-            //{
-            //    DisplayBeat(8);
-            //}
             else
             {
                 UpdateInput();
@@ -97,37 +99,8 @@ public class Game : MonoBehaviour
                     {
                         if (Input.GetKeyDown(alpha) || Input.GetKeyDown(keypad))
                         {
-                            if (count == (int)Upgrade.ProjectileSpeed)
-                            {
-                                GameManager.ProjectileSpeed *= 1.3f;
-                                GameManager.ChoosingUpgrade = false;
-                                Debug.Log("ProjSpeed");
-                            }
-                            else if (count == (int)Upgrade.MovementSpeed)
-                            {
-                                GameManager.PlayerSpeed *= 1.2f;
-                                GameManager.ChoosingUpgrade = false;
-                                Debug.Log("PlayerSpeed");
-                            }
-                            else if (count == (int)Upgrade.ProjectileDamage)
-                            {
-                                GameManager.PlayerDamage *= 2;
-                                GameManager.ChoosingUpgrade = false;
-                                Debug.Log("ProjDamage");
-                            }
-                            else if (count == (int)Upgrade.RateOfFire)
-                            {
-                                GameManager.PlayerFireRate -= 0.04f;
-                                GameManager.ChoosingUpgrade = false;
-                                Debug.Log("FireRate");
-                            }
-                            else if (count == (int)Upgrade.PlayerHealth)
-                            {
-                                GameManager.PlayerStartingHealth += (int)(GameManager.PlayerStartingHealth * 0.5f);
-                                GameManager.ChoosingUpgrade = false;
-                                HealthBar._healthSlider.maxValue = GameManager.PlayerStartingHealth;
-                                Debug.Log("PlayerHealth");
-                            }
+                            //Upgrades
+                            UpgradeStats(count);
                         }
                     }
                     ++alpha;
@@ -147,11 +120,7 @@ public class Game : MonoBehaviour
     private IEnumerator DoDisplay(BeatData data)
     {
         _output.Clear();
-
-        //if (GameManager._currentGameState == GameManager.State.Start)
-        //{
-            
-        //}
+        
         while (_output.IsBusy)
         {
             yield return null;
@@ -204,6 +173,36 @@ public class Game : MonoBehaviour
         if(data.Decision.Count > 0)
         {
             _output.ShowWaitingForInput();
+        }
+    }
+
+    private void UpgradeStats(int choice)
+    {
+        if (choice == (int)Upgrade.ProjectileSpeed)
+        {
+            GameManager.ProjectileSpeed *= PROJECTILE_SPEED_MULTIPLIER;
+            GameManager.ChoosingUpgrade = false;
+        }
+        else if (choice == (int)Upgrade.MovementSpeed)
+        {
+            GameManager.PlayerSpeed *= PLAYER_SPEED_MULTIPLIER;
+            GameManager.ChoosingUpgrade = false;
+        }
+        else if (choice == (int)Upgrade.ProjectileDamage)
+        {
+            GameManager.PlayerDamage *= PLAYER_DAMAGE_MULTIPLIER;
+            GameManager.ChoosingUpgrade = false;
+        }
+        else if (choice == (int)Upgrade.RateOfFire)
+        {
+            GameManager.PlayerFireRate -= RATE_OF_FIRE_MULTIPLIER;
+            GameManager.ChoosingUpgrade = false;
+        }
+        else if (choice == (int)Upgrade.PlayerHealth)
+        {
+            GameManager.PlayerStartingHealth += (int)(GameManager.PlayerStartingHealth * PLAYER_HEALTH_MULTIPLIER);
+            GameManager.ChoosingUpgrade = false;
+            HealthBar._healthSlider.maxValue = GameManager.PlayerStartingHealth;
         }
     }
 }

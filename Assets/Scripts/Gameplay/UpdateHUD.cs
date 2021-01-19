@@ -20,6 +20,6 @@ public class UpdateHUD : MonoBehaviour
     /// </summary>
     public static void UpdateWaveNumber()
     {
-        _displayText.text = WAVE_TEXT + GameManager.WaveNumber.ToString();
+        _displayText.text = WAVE_TEXT + (GameManager.WaveNumber + 1).ToString();
     }
 }
