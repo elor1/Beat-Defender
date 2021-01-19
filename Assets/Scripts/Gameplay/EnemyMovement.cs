@@ -73,6 +73,11 @@ public class EnemyMovement : MonoBehaviour
         //Destroy enemy object when dead
         if (!_isAlive)
         {
+            if (GameManager.CurrentGameState == GameManager.State.Playing)
+            {
+                GameManager.EnemiesKilled++;
+            }
+            
             _isAlive = false;
             Destroy(gameObject);
             EnemySpawner.AliveEnemies--;
