@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip[] _songs; //Songs to be added in inspector
     private int _currentSongIndex; //Index of song currently playing
     private float _timePlaying; //Number of seconds left before current song ends
+    private static int _enemiesKilled;
 
     public static int PlayerHealth; //Player's current health
     public static State CurrentGameState { get { return _currentGameState; } set { _currentGameState = value; } }
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
     public static float ProjectileSpeed { get { return _projectileSpeed; } set { _projectileSpeed = value; } }
     public static int WaveNumber { get { return _waveNumber; } set { _waveNumber = value; } }
     public static bool ChoosingUpgrade { set { _choosingUpgrade = value; } }
+    public static int EnemiesKilled { get { return _enemiesKilled; } set { _enemiesKilled = value; } }
 
     // Start is called before the first frame update
     void Awake()
@@ -58,6 +60,8 @@ public class GameManager : MonoBehaviour
         _audioSource.clip = _songs[0];
         _currentSongIndex = 0;
         _timePlaying = _audioSource.clip.length;
+
+        _enemiesKilled = 0;
 
         _screen.SetActive(false);
     }
