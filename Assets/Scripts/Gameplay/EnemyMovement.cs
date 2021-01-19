@@ -34,18 +34,6 @@ public class EnemyMovement : MonoBehaviour
         _pathfinding = GetComponent<Pathfinding>();
         _projectileSpawner = GetComponent<SpawnProjectiles>();
 
-        ////Set enemy stats
-        //if (GameManager.WaveNumber > 1)
-        //{
-
-        //}
-        //else
-        //{
-        //    Health = _enemyData.Health;
-        //    _fireRate = _enemyData.FireRate;
-        //    _damage = _enemyData.Damage;
-        //}
-
         //Increase enemy stats with each wave
         Health = _enemyData.Health + (GameManager.WaveNumber * HEALTH_MULTIPLIER);
         _fireRate = _enemyData.FireRate - (GameManager.WaveNumber * FIRE_RATE_MULTIPLIER);
@@ -54,8 +42,8 @@ public class EnemyMovement : MonoBehaviour
         _fireRate -= AudioAnalyser.LoudestFrequency * FREQUENCY_MULTIPLIER;
 
         _previousTile = new Tile();
-        _previousTile._coord.tileX = (int)transform.position.x;
-        _previousTile._coord.tileY = (int)transform.position.z;
+        _previousTile.Coord.tileX = (int)transform.position.x;
+        _previousTile.Coord.tileY = (int)transform.position.z;
 
         _isAlive = true;
 
@@ -109,7 +97,7 @@ public class EnemyMovement : MonoBehaviour
                         {
                             //Move enemy towards player
                             _step = _enemyData.Speed * Time.deltaTime;
-                            Vector3 target = new Vector3(_pathToPlayer[0]._coord.tileX, 0.0f, _pathToPlayer[0]._coord.tileY);
+                            Vector3 target = new Vector3(_pathToPlayer[0].Coord.tileX, 0.0f, _pathToPlayer[0].Coord.tileY);
                             MoveEnemy(target);
                         }
 

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Tile
 {
-    public MapGenerator.Coordinate _coord; //Map coordinates of tile
     private MapGenerator.TileType _type; //Tile type
     private GameObject _obj; //Cube game object on this tile
     private int _hCost = 0; //Tile's h cost
@@ -12,6 +11,7 @@ public class Tile
     private Tile _parent = null; //Previous tile in current path
     private int _neighbourWalls = 0; //Number of walls surrounding this tile
 
+    public MapGenerator.Coordinate Coord; //Map coordinates of tile
     public MapGenerator.TileType Type { get { return _type; } set { _type = value; } }
     public GameObject Obj { get { return _obj; } set { _obj = value; } }
     public int HCost { get { return _hCost; } set { _hCost = value; } }
@@ -27,7 +27,7 @@ public class Tile
     /// <returns>True of false</returns>
     public bool isEqual(Tile other)
     {
-        if (this._coord.tileX == other._coord.tileX && this._coord.tileY == other._coord.tileY)
+        if (this.Coord.tileX == other.Coord.tileX && this.Coord.tileY == other.Coord.tileY)
         {
             return true;
         }

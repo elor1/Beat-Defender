@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnProjectiles : MonoBehaviour
 {
     [SerializeField] private GameObject _firePoint; //Place to spawn projectile
-    [SerializeField] private GameObject particleToSpawn; //Choose particle to spawn in editor
+    [SerializeField] private GameObject _particleToSpawn; //Choose particle to spawn in editor
     
     /// <summary>
     /// Instantiates a particle at a give position
@@ -14,7 +14,7 @@ public class SpawnProjectiles : MonoBehaviour
     public void SpawnParticle(Color colour)
     {
         GameObject particle;
-        particle = Instantiate(particleToSpawn, _firePoint.transform.position, Quaternion.identity);
+        particle = Instantiate(_particleToSpawn, _firePoint.transform.position, Quaternion.identity);
         ParticleSystem particleSystem = particle.GetComponentInChildren<ParticleSystem>();
         TrailRenderer trail = particle.GetComponentInChildren<TrailRenderer>();
 

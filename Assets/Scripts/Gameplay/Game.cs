@@ -25,7 +25,7 @@ public class Game : MonoBehaviour
     private WaitForSeconds _wait;
     private string[] _upgrades = { "Increase projectile speed", "Increase player speed", "Increase projectile damage", "Increase rate of fire", "Increase player health" };
 
-    public static Game _singleton;
+    public static Game Singleton;
     public static BeatData CurrentBeat { get { return _currentBeat; } }
 
     private void Awake()
@@ -34,7 +34,7 @@ public class Game : MonoBehaviour
         _currentBeat = null;
         _wait = new WaitForSeconds(0.5f);
 
-        _singleton = this;        
+        Singleton = this;        
     }
 
     private void Update()

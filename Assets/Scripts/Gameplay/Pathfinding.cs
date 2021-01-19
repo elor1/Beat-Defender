@@ -16,8 +16,8 @@ public class Pathfinding : MonoBehaviour
             for (int y = 0; y < MapGenerator.Height; y++)
             {
                 Tile tile = new Tile();
-                tile._coord.tileX = x;
-                tile._coord.tileY = y;
+                tile.Coord.tileX = x;
+                tile.Coord.tileY = y;
                 tile.Type = MapGenerator.MapGrid[x, y].Type;
                 _nodes[x, y] = tile;
             }
@@ -132,9 +132,9 @@ public class Pathfinding : MonoBehaviour
                     continue;
                 }
 
-                if (MapGenerator.IsInBounds(tile._coord.tileX + x, tile._coord.tileY + y))
+                if (MapGenerator.IsInBounds(tile.Coord.tileX + x, tile.Coord.tileY + y))
                 {
-                    neighbours.Add(_nodes[tile._coord.tileX + x, tile._coord.tileY + y]);
+                    neighbours.Add(_nodes[tile.Coord.tileX + x, tile.Coord.tileY + y]);
                 }
             }
         }
@@ -149,8 +149,8 @@ public class Pathfinding : MonoBehaviour
     /// <returns>Distance cost betwen the tiles</returns>
     private int CalculateDistance(Tile tileA, Tile tileB)
     {
-        int distanceX = Mathf.Abs(tileA._coord.tileX - tileB._coord.tileX);
-        int distanceY = Mathf.Abs(tileA._coord.tileY - tileB._coord.tileY);
+        int distanceX = Mathf.Abs(tileA.Coord.tileX - tileB.Coord.tileX);
+        int distanceY = Mathf.Abs(tileA.Coord.tileY - tileB.Coord.tileY);
 
         if (distanceX > distanceY)
             return 14 * distanceY + 10 * (distanceX - distanceY);

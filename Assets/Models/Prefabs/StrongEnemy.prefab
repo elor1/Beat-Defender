@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _firePoint: {fileID: 3348967211532678585}
-  particleToSpawn: {fileID: 2165187684106465843, guid: 0f731ceedfddd1a458d8ccc31af3b1dc, type: 3}
+  _particleToSpawn: {fileID: 2165187684106465843, guid: 0f731ceedfddd1a458d8ccc31af3b1dc, type: 3}
 --- !u!114 &2257560380628624376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,12 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 11400000, guid: 63f2f16748c53994dbfe67623f45b95e, type: 2}
-  _health: 1
-  _fireRate: 0
-  _damage: 0
-  _isAlive: 1
-  _playerRadius: 10
-  _enemyRadius: 3
+  Health: 0
 --- !u!114 &3728094866216641955
 MonoBehaviour:
   m_ObjectHideFlags: 0

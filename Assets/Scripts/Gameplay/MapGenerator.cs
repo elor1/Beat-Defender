@@ -60,8 +60,8 @@ public class MapGenerator : MonoBehaviour
             for (int y = 0; y < _height; y++)
             {
                 _mapGrid[x, y] = new Tile();
-                _mapGrid[x, y]._coord.tileX = x;
-                _mapGrid[x, y]._coord.tileY = y;
+                _mapGrid[x, y].Coord.tileX = x;
+                _mapGrid[x, y].Coord.tileY = y;
             }
         }
 

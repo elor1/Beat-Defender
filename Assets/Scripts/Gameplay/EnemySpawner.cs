@@ -19,7 +19,7 @@ public class EnemySpawner : MonoBehaviour
         Strong
     }
 
-    [SerializeField] private EnemyData[] enemyTypes; //Add enemy scriptable objects in inspector
+    [SerializeField] private EnemyData[] _enemyTypes; //Add enemy scriptable objects in inspector
     private float _spawnDelay; //Time between each enemy is spawned
     private float _spawnTimer; //Time since last enemy was spawned
     private int _maxEnemies; //Maximum number of enemies to be alive at one time
@@ -42,13 +42,7 @@ public class EnemySpawner : MonoBehaviour
     {
         //The higher the average amplitude, the faster enemies spawn
         _spawnDelay = Mathf.Clamp(SPAWN_DELAY_MULTIPLIER / AudioAnalyser.AverageAmplitude, MIN_SPAWN_DELAY, MAX_SPAWN_DELAY);
-
-        ////The higher the wave number, enemies spawn faster and max number of enemies increases
-        //if (GameManager.WaveNumber > 1)
-        //{
-
-        //}
-
+        
         _maxEnemies = INITIAL_MAX_ENEMIES + (GameManager.WaveNumber * MAX_ENEMIES_MULTIPLIER);
         _spawnDelay = Mathf.Clamp(_spawnDelay - (GameManager.WaveNumber * WAVE_SPAWN_DELAY_MULTIPLIER), MIN_SPAWN_DELAY, MAX_SPAWN_DELAY);
 
@@ -88,7 +82,7 @@ public class EnemySpawner : MonoBehaviour
             }
 
             //Create new enemy object
-            Instantiate(enemyTypes[index].Prefab, new Vector3(spawnPoint.tileX * MapGenerator.TILE_SIZE, 0.0f, spawnPoint.tileY * MapGenerator.TILE_SIZE), Quaternion.identity);
+            Instantiate(_enemyTypes[index].Prefab, new Vector3(spawnPoint.tileX * MapGenerator.TILE_SIZE, 0.0f, spawnPoint.tileY * MapGenerator.TILE_SIZE), Quaternion.identity);
             _aliveEnemies++;
         }
     }

@@ -11,14 +11,14 @@ public class ScaleCubes : MonoBehaviour
     private const float MIN_HUE = 0.5f; //Minimum hue value a cube's colour can be
 
     private static GameObject _player; //Player game object
-    private static float maxDistanceToPlayer; //The distance between the player and the furthest cube
+    private static float _maxDistanceToPlayer; //The distance between the player and the furthest cube
 
     // Start is called before the first frame update
     void Start()
     {
         
         _player = GameObject.FindGameObjectWithTag("Player");
-        maxDistanceToPlayer = 0.0f;
+        _maxDistanceToPlayer = 0.0f;
 
         ResetScales();
     }
@@ -62,15 +62,15 @@ public class ScaleCubes : MonoBehaviour
     /// </summary>
     public static void RaiseWalls()
     {
-        maxDistanceToPlayer = 0.0f;
+        _maxDistanceToPlayer = 0.0f;
         for (int x = 0; x < MapGenerator.Width; x++)
         {
             for (int y = 0; y < MapGenerator.Height; y++)
             {
                 float distanceFromPlayer = Vector3.Distance(_player.transform.position, MapGenerator.MapGrid[x, y].Obj.transform.position);
-                if (distanceFromPlayer > maxDistanceToPlayer)
+                if (distanceFromPlayer > _maxDistanceToPlayer)
                 {
-                    maxDistanceToPlayer = distanceFromPlayer;
+                    _maxDistanceToPlayer = distanceFromPlayer;
                 }
 
                 float yScale = RAISE_SCALE / ((distanceFromPlayer * distanceFromPlayer) * 0.35f);
@@ -95,7 +95,7 @@ public class ScaleCubes : MonoBehaviour
 
                 //Saturation is determined by current audio amplitude & distance from player
                 float saturation = Mathf.Clamp(AudioAnalyser.CurrentAmplitude, 0.0f, 1.0f);
-                saturation = Mathf.Clamp(saturation * (1.0f / (distanceFromPlayer * (distanceFromPlayer / 3.0f) / maxDistanceToPlayer)), 0.0f, 1.0f);
+                saturation = Mathf.Clamp(saturation * (1.0f / (distanceFromPlayer * (distanceFromPlayer / 3.0f) / _maxDistanceToPlayer)), 0.0f, 1.0f);
 
                 //Set cube colour
                 Color cubeColour = Color.HSVToRGB(hue, saturation, 1.0f);

@@ -299,7 +299,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2797a905d0796b640aa8b18c8de2da1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 7000
 --- !u!114 &2104117296116967934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,8 +312,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _firePoint: {fileID: 1056158303112127210}
-  _fireRate: 0.5
-  particleToSpawn: {fileID: 2165187684106465843, guid: 0f731ceedfddd1a458d8ccc31af3b1dc, type: 3}
+  _particleToSpawn: {fileID: 2165187684106465843, guid: 0f731ceedfddd1a458d8ccc31af3b1dc, type: 3}
 --- !u!54 &146979825440665512
 Rigidbody:
   m_ObjectHideFlags: 0

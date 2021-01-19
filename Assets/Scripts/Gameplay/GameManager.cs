@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip[] _songs; //Songs to be added in inspector
     private int _currentSongIndex; //Index of song currently playing
     private float _timePlaying; //Number of seconds left before current song ends
-    private static int _enemiesKilled;
+    private static int _enemiesKilled; //Number of enemies the player has killed this game
 
     public static int PlayerHealth; //Player's current health
     public static State CurrentGameState { get { return _currentGameState; } set { _currentGameState = value; } }
@@ -78,7 +78,6 @@ public class GameManager : MonoBehaviour
             _currentGameState = State.Over;
             _audioSource.Stop();
             SceneManager.SwitchScene("EndScene");
-            Debug.Log("GAME OVER");
         }
         
         //When player has finished choosing upgrades, start new wave
@@ -122,7 +121,7 @@ public class GameManager : MonoBehaviour
     {
         _choosingUpgrade = true;
         _screen.SetActive(true);
-        Game._singleton.DisplayBeat(UPGRADE_BEAT_ID);
+        Game.Singleton.DisplayBeat(UPGRADE_BEAT_ID);
         _timePlaying = 5000.0f;
     }
 }

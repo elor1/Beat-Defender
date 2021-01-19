@@ -45,7 +45,6 @@ public class CameraMovement : MonoBehaviour
             {
                 //Switch to game scene
                 GameManager.CurrentGameState = GameManager.State.Playing;
-                Debug.Log(GameManager.CurrentGameState);
                 SceneManager.SwitchScene("GameScene");
             }
             else
