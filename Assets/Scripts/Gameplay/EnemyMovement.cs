@@ -8,10 +8,11 @@ public class EnemyMovement : MonoBehaviour
     private const int HEALTH_MULTIPLIER = 3; //Amount of health increase to enemies with each wave
     private const float FIRE_RATE_MULTIPLIER = 0.007f; //Amount rate of fire is increased each wave
     private const int DAMAGE_MULTIPLIER = 1; //Amount of damage increase enemies get each wave
-    private const float PLAYER_RADIUS = 10.0f; //Radius around player that enemies can't enter
+    private const float PLAYER_RADIUS = 5.0f; //Radius around player that enemies can't enter
 
     [SerializeField] private EnemyData _enemyData; //Enemy data scriptable object for enemy type
-    private GameObject _player; //Player game object
+    private GameObject _player; //Player sphere object
+    private GameObject[] _playerObjects; //Array of objects that make up player model
     private Rigidbody _rigidbody; //Enemy's rigidbody component
     private SpawnProjectiles _projectileSpawner; //Enemy's projectile spawner component
     private Pathfinding _pathfinding; //Enemy's pathfinding component
@@ -29,7 +30,20 @@ public class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _player = GameObject.FindGameObjectWithTag("Player");
+        //Find sphere part of player
+        _playerObjects = GameObject.FindGameObjectsWithTag("Player");
+        if(_playerObjects != null)
+        {
+            foreach (GameObject obj in _playerObjects)
+            {
+                if (obj.GetComponent<SphereCollider>() != null)
+                {
+                    _player = obj;
+                    break;
+                }
+            }
+        }
+        
         _rigidbody = GetComponent<Rigidbody>();
         _pathfinding = GetComponent<Pathfinding>();
         _projectileSpawner = GetComponent<SpawnProjectiles>();
