@@ -62,7 +62,7 @@ public class Game : MonoBehaviour
                 {
                     Application.Quit();
                 }
-                else
+                else if (_currentBeat.ID != 2)
                 {
                     DisplayBeat(1);
                 }

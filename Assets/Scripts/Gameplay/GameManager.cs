@@ -71,6 +71,12 @@ public class GameManager : MonoBehaviour
     {
         _timePlaying -= Time.deltaTime;
 
+        //If escape key is pressed whilst playing, go back to main menu
+        if (Input.GetKeyDown(KeyCode.Escape) && _currentGameState == State.Playing)
+        {
+            RestartGame.Restart();
+        }
+
         //If player runs out of health, game is over
         if (PlayerHealth <= 0)
         {

@@ -7,7 +7,7 @@ public class RestartGame : MonoBehaviour
     /// <summary>
     /// Goes back to menu screen and resets the game
     /// </summary>
-    public void Restart()
+    public static void Restart()
     {
         GameManager.CurrentGameState = GameManager.State.Start;
         SceneManager.SwitchScene("IntroScene");
