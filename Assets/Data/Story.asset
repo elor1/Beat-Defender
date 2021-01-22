@@ -14,21 +14,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _beats:
   - _choices:
-    - _text: The first choice is to go one way...
+    - _text: 'PLAY GAME
+
+'
       _beatId: 2
-    - _text: The second choice is to go the alternative way...
+    - _text: 'HOW TO PLAY
+
+'
       _beatId: 3
-    _text: "The story starts here. \nSome stuff happens and then you are faced with
-      a choice. "
+    _text: 'BEAT DEFENDER
+
+
+'
     _id: 1
   - _choices: []
-    _text: "You choose to go the first way and this is an ok choice, the story plays
-      out. You are happy. \n\nTHE END"
+    _text: LAUNCHING DEFENDER...
     _id: 2
   - _choices: []
-    _text: 'The alternative choice is where you want to go, it is a fine choice.
-      The story plays out and you are happy.
+    _text: 'HOW TO PLAY:
 
 
-      THE END.'
+      WASD to move
+
+      Left click to shoot
+
+
+      Round
+      enemies shoot and move quicker
+
+      Square enemies are stronger and do more
+      damage
+
+
+      Attempt to survive multiple waves by killing enemies
+
+      Enemy
+      stats increase based on the music and number of waves survived
+
+      Each
+      wave lasts the length of a song
+
+
+      Press ESC to return to menu'
     _id: 3
+  - _choices: []
+    _text: 'Wave Complete!
+
+
+      Choose upgrade:
+
+'
+    _id: 4

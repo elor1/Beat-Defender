@@ -18,11 +18,41 @@ public class TextDisplay : MonoBehaviour
     private void Awake()
     {
         _displayText = GetComponent<TMP_Text>();
-        _shortWait = new WaitForSeconds(0.1f);
+        _shortWait = new WaitForSeconds(0.03f);
         _longWait = new WaitForSeconds(0.8f);
 
-        _displayText.text = string.Empty;
+        _displayString = string.Empty;
+        _displayText.text = _displayString;
         _state = State.Idle;
+    }
+
+    private void Update()
+    {
+        if (GameManager.CurrentGameState == GameManager.State.WaveEnd)
+        {
+            _shortWait = new WaitForSeconds(0.01f);
+        }
+        else
+        {
+            _shortWait = new WaitForSeconds(0.03f);
+        }
+
+        if (Game.CurrentBeat != null)
+        {
+            if (Game.CurrentBeat.ID <= 2)
+            {
+                _displayText.fontSize = 100;
+            }
+            else if (Game.CurrentBeat.ID == 3)
+            {
+                _displayText.fontSize = 60;
+            }
+            else
+            {
+                _displayText.fontSize = 86;
+            }
+        }
+        
     }
 
     private IEnumerator DoShowText(string text)
@@ -103,9 +133,19 @@ public class TextDisplay : MonoBehaviour
     {
         if (_state == State.Idle)
         {
-            StopAllCoroutines();
-            _state = State.Busy;
-            StartCoroutine(DoClearText());
+            if (GameManager.CurrentGameState == GameManager.State.Start)
+            {
+                StopAllCoroutines();
+                _state = State.Busy;
+                StartCoroutine(DoClearText());
+            }
+            else
+            {
+                _displayString = string.Empty;
+                _displayText.text = _displayString;
+                _state = State.Idle;
+            }
         }
     }
+
 }
